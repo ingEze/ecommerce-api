@@ -1,0 +1,44 @@
+{
+  "name": "mini-ecommerce-api",
+  "version": "1.0.0",
+  "main": "dist/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "prestart": "npm run build",
+    "start": "node dist/main.js",
+    "build": "node esbuild.config.js",
+    "start:docker": "docker-compose up --build",
+    "stop:docker": "docker-compose down",
+    "rebuild": "npm run clean && npm run build",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [],
+  "author": "Ezequiel Saucedo",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.9",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.0.3",
+    "esbuild": "^0.25.5",
+    "eslint": "^9.29.0",
+    "globals": "^16.2.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.1"
+  },
+  "dependencies": {
+    "@ingeze/api-error": "^1.0.6",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.0",
+    "zod": "^3.25.67"
+  }
+}
