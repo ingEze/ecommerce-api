@@ -10,6 +10,7 @@ export const config = {
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'Admin123!'
   },
   jwt: {
-    AUTH_TOKEN_SECRET: process.env.AUTH_TOKEN_SECRET
+    AUTH_TOKEN_SECRET: process.env.AUTH_TOKEN_SECRET,
+    AUTH_REFRESh_SECRET: process.env.REFRESH_AUTH_SECRET
   }
 }
