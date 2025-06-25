@@ -15,3 +15,4 @@ export function registerValidationData(input: AuthDto): AuthDto | undefined {
   const result = RegisterSchema.safeParse(input)
   return result.success ? result.data : undefined
 }
+

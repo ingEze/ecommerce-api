@@ -3,6 +3,7 @@ import { User } from 'src/models/user.schema.js'
 import { IUser } from 'src/types/user.types.js'
 
 export class AuthRepository {
+
   async findUserByEmail(email: string): Promise<IUser | null> {
     const user = await User.findOne({ email: email })
     return user
@@ -13,4 +14,10 @@ export class AuthRepository {
     return await user.save()
   }
 
+  async resetPassword(_id: string, newPassword: string): Promise<void> {
+    await User.updateOne(
+      { _id: _id },
+      { $set: { password: newPassword } }
+    )
+  }
 }

@@ -9,4 +9,5 @@ export interface IUser extends Document {
   password: string
   createdAt: Date
   updatedAt: Date
+  role: Array<'User' | 'Seller' | 'Admin'>
 }

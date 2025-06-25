@@ -32,4 +32,12 @@ export class AuthService {
       refresh_token
     }
   }
+
+  async resetPassword(data: AuthDto): Promise<void> {
+    parsedData(data)
+    const user = await new AuthRepository().findUserByEmail(data?.email)
+    if (!user) throw new UserNotFoundError({ reason: `${data.email} not found` })
+    const newPasswordHash = await hashedPassword(data.password)
+    await new AuthRepository().resetPassword(user._id, newPasswordHash)
+  }
 }

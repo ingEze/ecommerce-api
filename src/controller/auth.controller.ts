@@ -10,7 +10,7 @@ export class AuthController {
   register = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { email, password } = req.body
-      checkRequiredFields(email, password)
+      checkRequiredFields([email, password])
       await this.authService.register({ email, password })
 
       res.status(201).json({
@@ -25,7 +25,7 @@ export class AuthController {
   login = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { email, password } = req.body
-      checkRequiredFields(email, password)
+      checkRequiredFields([email, password])
 
       const token = await this.authService.login({ email, password })
 
@@ -53,6 +53,26 @@ export class AuthController {
     }
   }
 
+  resetPassword = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const {
+        email,
+        password
+      } = req.body
+      checkRequiredFields([email, password])
+
+      await this.authService.resetPassword({ email, password })
+
+      res.status(200).json({
+        success: true,
+        message: 'Password change successfully'
+      })
+
+    } catch (err) {
+      next(err)
+    }
+  }
+
   refreshToken = (req: Request, res: Response, next: NextFunction): void => {
     try {
       const user = req.user
@@ -60,7 +80,7 @@ export class AuthController {
         throw new UnauthorizedError({ reason: 'Invalid user payload' })
       }
 
-      const accessToken = generateAuthToken({ _id: user._id })
+      const accessToken = generateAuthToken({ _id: user.id })
 
       res
         .cookie('access_token', accessToken, {
