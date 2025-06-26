@@ -8,7 +8,7 @@ const REFRESH_SECRET = config.jwt.AUTH_REFRESh_SECRET ?? 'secret123'
 export const generateAuthToken = (data: { _id: string }): string => {
   return jwt.sign(
     {
-      id: data._id
+      _id: data._id
     },
     AUTH_SECRET,
     {

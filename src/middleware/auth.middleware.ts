@@ -9,8 +9,8 @@ export const refreshTokenMiddleware = (req: Request, res: Response, next: NextFu
       throw new UnauthorizedError({ reason: 'Token invalid or exipered' })
     }
 
-    const decoded = verifyRefreshToken(refresh_token) as { id: string }
-    if (typeof decoded === 'string' || !decoded.id) {
+    const decoded = verifyRefreshToken(refresh_token) as { _id: string }
+    if (typeof decoded === 'string' || !decoded._id) {
       throw new InvalidTokenError({ reason: 'Invalid token format' })
     }
 
@@ -25,15 +25,12 @@ export const refreshTokenMiddleware = (req: Request, res: Response, next: NextFu
 export const accessTokenMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   try {
     const { access_token } = req.cookies
-    console.log(access_token)
     if (!access_token) {
       throw new UnauthorizedError({ reason: 'Token invalid or expired' })
     }
 
-    const decoded = verifyAuthToken(access_token) as { id: string }
-    console.log('decoded', decoded)
-    console.log('typeof decoded', typeof decoded)
-    if (typeof decoded !== 'object' || !decoded.id) {
+    const decoded = verifyAuthToken(access_token) as { _id: string }
+    if (typeof decoded !== 'object' || !decoded._id) {
       throw new InvalidTokenError({ reason: 'Invalid token format' })
     }
 

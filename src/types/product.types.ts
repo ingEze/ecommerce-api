@@ -1,15 +1,23 @@
-import { Types } from 'mongoose'
-import { IUser } from 'src/types/user.types.js'
+import { Schema } from 'mongoose'
 
 export interface IProductSchema {
-  title: string,
-  price: number,
-  description: string,
-  owner: Types.ObjectId | IUser
+  title: string
+  price: number
+  description: string
+  quantity: number
+  owner: Schema.Types.ObjectId
 }
 
 export interface ProductDto {
-  title: string,
-  price: number,
-  description: string
+  title: string
+  price: number
+  description: string,
+  quantity?: number
+}
+
+export interface IGetAllProducts {
+  limit: number
+  maxPage: number
+  totalProducts: number
+  products: IProductSchema[]
 }

@@ -14,6 +14,10 @@ const ProductSchema = new mongoose.Schema<IProductSchema>({
     type: String,
     required: true
   },
+  quantity: {
+    type: Number,
+    default: 1
+  },
   owner: {
     type: Types.ObjectId,
     ref: 'User',
@@ -21,4 +25,4 @@ const ProductSchema = new mongoose.Schema<IProductSchema>({
   }
 },{ timestamps: true })
 
-export const Product = mongoose.model('Product', ProductSchema)
+export const Products = mongoose.model('Products', ProductSchema)

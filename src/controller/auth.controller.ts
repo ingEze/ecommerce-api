@@ -9,9 +9,9 @@ export class AuthController {
 
   register = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { email, password } = req.body
-      checkRequiredFields([email, password])
-      await this.authService.register({ email, password })
+      const { email, password, role } = req.body
+      checkRequiredFields({ email, password })
+      await this.authService.register({ email, password, role })
 
       res.status(201).json({
         success: true,
@@ -25,13 +25,13 @@ export class AuthController {
   login = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { email, password } = req.body
-      checkRequiredFields([email, password])
+      checkRequiredFields({ email, password })
 
       const token = await this.authService.login({ email, password })
 
       const CONFIG_COOKIE = {
         httpOnly: true,
-        secure: true,
+        secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict' as const
       }
 
@@ -59,7 +59,7 @@ export class AuthController {
         email,
         password
       } = req.body
-      checkRequiredFields([email, password])
+      checkRequiredFields({ email, password })
 
       await this.authService.resetPassword({ email, password })
 
@@ -80,8 +80,7 @@ export class AuthController {
         throw new UnauthorizedError({ reason: 'Invalid user payload' })
       }
 
-      const accessToken = generateAuthToken({ _id: user.id })
-
+      const accessToken = generateAuthToken({ _id: user._id })
       res
         .cookie('access_token', accessToken, {
           httpOnly: true,

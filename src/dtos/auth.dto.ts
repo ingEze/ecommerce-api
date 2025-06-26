@@ -6,7 +6,10 @@ const RegisterSchema = z.object({
     .email(),
   password: z
     .string()
-    .min(8)
+    .min(8),
+  role: z
+    .enum(['User', 'Seller'])
+    .optional()
 })
 
 export type AuthDto = z.infer<typeof RegisterSchema>

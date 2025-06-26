@@ -1,3 +1,5 @@
+import { Types } from 'mongoose'
+
 export interface CreateUser {
   email: string,
   password: string
@@ -10,4 +12,5 @@ export interface IUser extends Document {
   createdAt: Date
   updatedAt: Date
   role: Array<'User' | 'Seller' | 'Admin'>
+  products: Types.ObjectId[]
 }

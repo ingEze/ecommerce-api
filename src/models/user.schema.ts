@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import { IUser } from 'src/types/user.types.js'
 
 const UserSchema = new mongoose.Schema<IUser>({
@@ -15,7 +15,13 @@ const UserSchema = new mongoose.Schema<IUser>({
     type: [String],
     enum: ['User', 'Seller', 'Admin'],
     default: ['User']
-  }
+  },
+  products: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Products'
+    }
+  ]
 },
 { timestamps:  true }
 )
