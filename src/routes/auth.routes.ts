@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { AuthController } from 'src/controller/auth.controller.js'
-import { refreshTokenMiddleware } from 'src/middleware/auth.middleware.js'
+import { refreshTokenMiddleware } from 'src/middleware/index.js'
 import { AuthService } from 'src/service/auth.service.js'
 
 const authRoute = Router()

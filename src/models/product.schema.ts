@@ -1,4 +1,4 @@
-import mongoose, { Types } from 'mongoose'
+import mongoose from 'mongoose'
 import { IProductSchema } from 'src/types/product.types.js'
 
 const ProductSchema = new mongoose.Schema<IProductSchema>({
@@ -19,7 +19,7 @@ const ProductSchema = new mongoose.Schema<IProductSchema>({
     default: 1
   },
   owner: {
-    type: Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
   }

@@ -1,5 +1,6 @@
 import { UnauthorizedError } from '@ingeze/api-error'
 import { Request, Response, NextFunction } from 'express'
+import { loginOrResetValidation, registerValidationData } from 'src/dtos/auth.dto.js'
 import { AuthService } from 'src/service/auth.service.js'
 import { checkRequiredFields } from 'src/utils/dataEmptyError.js'
 import { generateAuthToken } from 'src/utils/jwt.js'
@@ -9,9 +10,10 @@ export class AuthController {
 
   register = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { email, password, role } = req.body
-      checkRequiredFields({ email, password })
-      await this.authService.register({ email, password, role })
+      const data = registerValidationData(req.body)
+
+      checkRequiredFields(data)
+      await this.authService.register(data)
 
       res.status(201).json({
         success: true,
@@ -24,10 +26,10 @@ export class AuthController {
 
   login = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { email, password } = req.body
-      checkRequiredFields({ email, password })
+      const data = loginOrResetValidation(req.body)
+      checkRequiredFields(data)
 
-      const token = await this.authService.login({ email, password })
+      const token = await this.authService.login(data)
 
       const CONFIG_COOKIE = {
         httpOnly: true,
@@ -55,13 +57,11 @@ export class AuthController {
 
   resetPassword = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const {
-        email,
-        password
-      } = req.body
-      checkRequiredFields({ email, password })
+      const data = loginOrResetValidation(req.body)
 
-      await this.authService.resetPassword({ email, password })
+      checkRequiredFields(data)
+
+      await this.authService.resetPassword(data)
 
       res.status(200).json({
         success: true,

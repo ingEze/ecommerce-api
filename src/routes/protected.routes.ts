@@ -1,14 +1,18 @@
 import { Router } from 'express'
-import { accessTokenMiddleware } from 'src/middleware/auth.middleware.js'
-import { ProtectedController } from 'src/controller/protected.controller.js'
-import { ProductsService } from 'src/service/protected.service.js'
+import { authWithRefreshMiddleware, roleSellerMiddleware } from 'src/middleware/index.js'
+import { ProtectedController } from 'src/controller/products.controller.js'
+import { ProductsService } from 'src/service/products.service.js'
 import { ProductRepository } from 'src/repository/products.repository.js'
 
 const controller = new ProtectedController(new ProductsService(new ProductRepository))
 
 const protectedRoute = Router()
 
-protectedRoute.get('/products', accessTokenMiddleware, controller.getAllProducts)
-protectedRoute.post('/products', accessTokenMiddleware, controller.addProduct)
+// Role @User
+protectedRoute.get('/products', authWithRefreshMiddleware, controller.getAllProducts)
+
+// Role @Seller
+protectedRoute.post('/products', authWithRefreshMiddleware, roleSellerMiddleware, controller.addProduct)
+protectedRoute.patch('/products', authWithRefreshMiddleware, roleSellerMiddleware, controller.updateProduct)
 
 export default protectedRoute

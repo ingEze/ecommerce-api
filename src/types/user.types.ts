@@ -8,9 +8,10 @@ export interface CreateUser {
 export interface IUser extends Document {
   _id: string
   email: string
+  username: string
   password: string
   createdAt: Date
   updatedAt: Date
   role: Array<'User' | 'Seller' | 'Admin'>
-  products: Types.ObjectId[]
+  products: Types.ObjectId
 }

@@ -1,23 +1,32 @@
-import { Schema } from 'mongoose'
+import { Types, Document } from 'mongoose'
 
-export interface IProductSchema {
+export interface IProductSchema extends Document {
+  _id: Types.ObjectId
   title: string
   price: number
   description: string
   quantity: number
-  owner: Schema.Types.ObjectId
+  owner: Types.ObjectId
 }
 
 export interface ProductDto {
   title: string
   price: number
-  description: string,
+  description: string
+  quantity?: number
+}
+
+export interface ProductUpdateDto {
+  title?: string
+  price?: number
+  description?: string
   quantity?: number
 }
 
 export interface IGetAllProducts {
+  page: number
   limit: number
-  maxPage: number
+  totalPage: number
   totalProducts: number
   products: IProductSchema[]
 }
