@@ -1,4 +1,4 @@
-import { Types, Document } from 'mongoose'
+import { Types, Document, Schema } from 'mongoose'
 
 export interface IProductSchema extends Document {
   _id: Types.ObjectId
@@ -6,7 +6,7 @@ export interface IProductSchema extends Document {
   price: number
   description: string
   quantity: number
-  owner: Types.ObjectId
+  owner: Schema.Types.ObjectId
 }
 
 export interface ProductDto {

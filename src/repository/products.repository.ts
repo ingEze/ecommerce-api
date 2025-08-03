@@ -1,4 +1,5 @@
-import { ProductNotFoundError } from '@ingeze/api-error'
+import { ProductNotFoundError, UserNotFoundError } from '@ingeze/api-error'
+import { ObjectId } from 'mongoose'
 import { Products } from 'src/models/product.schema.js'
 import { User } from 'src/models/user.schema.js'
 import { IProductSchema, ProductDto, ProductUpdateDto } from 'src/types/product.types.js'
@@ -16,6 +17,18 @@ export class ProductRepository {
       .limit(limit)
 
     return products
+  }
+
+  async getUserById(userId: ObjectId): Promise<string> {
+    const user = await User.findById(userId)
+    if (!user) throw new UserNotFoundError()
+    return user?.username
+  }
+
+  async getProductById(productId: string): Promise<IProductSchema> {
+    const product = await Products.findById(productId)
+    if (!product) throw new ProductNotFoundError()
+    return product
   }
 
   async createProducts(userId: string, data: ProductDto): Promise<IProductSchema> {
@@ -40,7 +53,9 @@ export class ProductRepository {
   }
 
   async updateProducts(userId: string, productId: string, data: ProductUpdateDto): Promise<void> {
+    console.log('PRODUCT ID', productId)
     const user = await User.findById(userId).populate('products')
+    console.log('user', user)
 
     const products = user?.products as IProductSchema[] | undefined
     const product = products?.find(p => p._id.toString() === productId)

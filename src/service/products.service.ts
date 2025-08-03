@@ -24,7 +24,26 @@ export class ProductsService {
       totalPage,
       totalProducts,
       products: formated
-    }}
+    }
+  }
+
+  async getProductById(productId: string): Promise<ProductDto> {
+    if (productId.length !== 24) {
+      throw new BadRequestError({
+        reason: 'Invalid product ID format'
+      })
+    }
+    const product = await this.productRepository.getProductById(productId)
+    const user = await this.productRepository.getUserById(product.owner)
+    const productSanitized = {
+      title: product.title,
+      price: product.price,
+      description: product.description,
+      quantity: product.quantity,
+      owner: user
+    }
+    return productSanitized
+  }
 
   async createProduct(userId: string, data: ProductDto): Promise<ProductDto> {
     const result = await this.productRepository.createProducts(userId, data)
@@ -35,4 +54,6 @@ export class ProductsService {
   async updateProduct(userId: string, productId: string, data: ProductUpdateDto): Promise<void> {
     await this.productRepository.updateProducts(userId, productId, data)
   }
+
+  // async deleteProduct(userId: string, productId: string, data: string): Promise<void> {}
 }

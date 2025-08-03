@@ -6,13 +6,14 @@ import { ProductRepository } from 'src/repository/products.repository.js'
 
 const controller = new ProtectedController(new ProductsService(new ProductRepository))
 
-const protectedRoute = Router()
+const productsRoute = Router()
 
 // Role @User
-protectedRoute.get('/products', authWithRefreshMiddleware, controller.getAllProducts)
+productsRoute.get('/products', authWithRefreshMiddleware, controller.getAllProducts)
+productsRoute.get('/products/:id', authWithRefreshMiddleware, controller.getProductById)
 
 // Role @Seller
-protectedRoute.post('/products', authWithRefreshMiddleware, roleSellerMiddleware, controller.addProduct)
-protectedRoute.patch('/products', authWithRefreshMiddleware, roleSellerMiddleware, controller.updateProduct)
+productsRoute.post('/products', authWithRefreshMiddleware, roleSellerMiddleware, controller.addProduct)
+productsRoute.patch('/products/:id', authWithRefreshMiddleware, roleSellerMiddleware, controller.updateProduct)
 
-export default protectedRoute
+export default productsRoute

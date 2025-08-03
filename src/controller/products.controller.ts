@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import { validatePaginationParams } from 'src/dtos/pagination.dto.js'
 import { ProductUpdateValidation, ProductValidation } from 'src/dtos/product.dto.js'
 import { ProductsService } from 'src/service/products.service.js'
-import { ProductDto, ProductUpdateDto } from 'src/types/product.types.js'
+import { ProductDto } from 'src/types/product.types.js'
 import { getCurrentUserById } from 'src/utils/getCurrentUserID.js'
 
 export class ProtectedController {
@@ -49,6 +49,20 @@ export class ProtectedController {
     }
   }
 
+  getProductById = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params
+      const result = await this.productsService.getProductById(id)
+      res.status(200).json({
+        success: true,
+        message: 'Products',
+        data: result
+      })
+    } catch (err) {
+      next(err)
+    }
+  }
+
   addProduct = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const validated = ProductValidation(req.body)
@@ -57,7 +71,7 @@ export class ProtectedController {
       const userId = getCurrentUserById(req)
 
       const result: ProductDto[] = await Promise.all(
-        validated.map(product =>this.productsService.createProduct(userId, product))
+        validated.map(product => this.productsService.createProduct(userId, product))
       )
 
       res.status(201).json({
@@ -72,39 +86,27 @@ export class ProtectedController {
 
   updateProduct = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const {
-        title,
-        price,
-        description,
-        quantity
-      } = req.body
+      const validateData = ProductUpdateValidation(req.body)
 
       const { id: productId } = req.params
       if (!productId) throw new BadRequestError({ reason: 'Query empty' })
-
-      const data: Partial<ProductUpdateDto> = {
-        title,
-        price,
-        description,
-        quantity
-      }
-
-      const validateData = ProductUpdateValidation(data)
 
       if (!validateData) {
         throw new ValidationProductError({ reason: validateData })
       }
 
       const userId = getCurrentUserById(req)
-      console.log(userId)
 
-      await this.productsService.updateProduct(userId, productId, validateData)
+      const result = await this.productsService.updateProduct(userId, productId, validateData)
+      console.log(result)
 
       res.status(200).json({
         success: true,
-        message: 'Product updated successfully'
+        message: 'Product updated successfully',
+        product: result
       })
     } catch (err) {
+      console.error(err)
       next(err)
     }
   }

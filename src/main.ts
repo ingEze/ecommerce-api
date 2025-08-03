@@ -2,7 +2,7 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import { expressErrorMiddleware } from '@ingeze/api-error/express'
 
-import { authRoute, protectedRoute } from './routes/index.js'
+import { authRoute, productsRoute } from './routes/index.js'
 
 import { connectDB } from './db/mongoDB/connectDB.js'
 
@@ -13,7 +13,7 @@ app.use(cookieParser())
 connectDB()
 
 app.use('/auth', authRoute)
-app.use('/protected', protectedRoute)
+app.use('/protected', productsRoute)
 
 app.use(expressErrorMiddleware)
 
