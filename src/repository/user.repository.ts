@@ -13,6 +13,11 @@ export class UserRepository {
     return user
   }
 
+  async findUserByUsername(username: string): Promise<IUser | null> {
+    const user = await User.findOne({ username: username })
+    return user
+  }
+
   async createUser(data: AuthDto): Promise<IUser> {
     const user = new User(data)
     return await user.save()

@@ -1,15 +1,29 @@
-import { BadRequestError } from '@ingeze/api-error'
+import { BadRequestError, UserNotFoundError } from '@ingeze/api-error'
 import { ProductRepository } from 'src/repository/products.repository.js'
-import { IGetAllProducts, ProductDto, ProductUpdateDto } from 'src/types/product.types.js'
+import { IGetAllProducts, IProductsService, ProductDto, ProductUpdateDto } from 'src/types/product.types.js'
 import { formatProducts } from 'src/utils/formatProduct.js'
+import { UserRepository } from 'src/repository/user.repository.js'
 
-export class ProductsService {
+const userRepository = new UserRepository
+export class ProductsService implements IProductsService {
   constructor(private readonly productRepository: ProductRepository) {}
 
-  async getAllProducts(page: number = 1, limit: number = 20): Promise<IGetAllProducts> {
-    const totalProducts = await this.productRepository.getMountProducts()
+  async getAllProducts(page: number = 1, limit: number = 20, username?: string, title?: string): Promise<IGetAllProducts> {
+    const filter: Record<string, string> = {}
+
+    if (username) {
+      const user = await userRepository.findUserByUsername(username)
+      if (!user) throw new UserNotFoundError()
+      filter.owner = user._id
+    }
+
+    if (title) {
+      filter.title = title
+    }
+
+    const totalProducts = await this.productRepository.getMountProducts(filter)
     const totalPage = Math.ceil(totalProducts / limit)
-    const products = await this.productRepository.getAllProducts(page, limit)
+    const products = await this.productRepository.getAllProducts(page, limit, filter)
 
     if (!products) {
       throw new BadRequestError({
@@ -55,5 +69,7 @@ export class ProductsService {
     await this.productRepository.updateProducts(userId, productId, data)
   }
 
-  // async deleteProduct(userId: string, productId: string, data: string): Promise<void> {}
+  async deleteProduct(userId: string, productId: string): Promise<void> {
+    await this.productRepository.deleteProduct(userId, productId)
+  }
 }

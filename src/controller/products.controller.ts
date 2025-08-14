@@ -12,10 +12,12 @@ export class ProtectedController {
     try {
       const page = parseInt(req.query.page as string) || 1
       const limit = parseInt(req.query.limit as string) || 20
+      const username = req.query.user as string | undefined
+      const title = req.query.title as string | undefined
 
       validatePaginationParams(page || 1, limit || 20)
 
-      const result = await this.productsService.getAllProducts(page, limit)
+      const result = await this.productsService.getAllProducts(page, limit, username, title)
       const products = result.products
 
       const pagination = {
@@ -107,6 +109,19 @@ export class ProtectedController {
       })
     } catch (err) {
       console.error(err)
+      next(err)
+    }
+  }
+
+  deletedProduct = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id } = req.params
+      const userId = getCurrentUserById(req)
+
+      await this.productsService.deleteProduct(userId, id)
+
+      res.status(204).send()
+    } catch (err) {
       next(err)
     }
   }

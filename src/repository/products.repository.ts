@@ -1,18 +1,28 @@
-import { ProductNotFoundError, UserNotFoundError } from '@ingeze/api-error'
+import { ForbiddenUserError, ProductNotFoundError, UserNotFoundError } from '@ingeze/api-error'
 import { ObjectId } from 'mongoose'
 import { Products } from 'src/models/product.schema.js'
 import { User } from 'src/models/user.schema.js'
 import { IProductSchema, ProductDto, ProductUpdateDto } from 'src/types/product.types.js'
 
 export class ProductRepository {
-  async getMountProducts(): Promise<number> {
-    return await Products.countDocuments()
+  async getMountProducts(filter: object = {}): Promise<number> {
+    return await Products.countDocuments(filter)
   }
 
-  async getAllProducts(page: number, limit: number): Promise<IProductSchema[]> {
-    const products = await Products
-      .find()
-      .populate('owner', '_id username')
+  async getAllProducts(page: number, limit: number, filter: { title?: string } = {}): Promise<IProductSchema[]> {
+    let products
+
+    if (filter?.title) {
+      products = await Products
+        .find({
+          title: { $regex: filter.title, $options: 'i' }
+        })
+
+      return products
+    }
+
+    products = await Products
+      .find(filter)
       .skip((page - 1) * limit)
       .limit(limit)
 
@@ -53,9 +63,7 @@ export class ProductRepository {
   }
 
   async updateProducts(userId: string, productId: string, data: ProductUpdateDto): Promise<void> {
-    console.log('PRODUCT ID', productId)
     const user = await User.findById(userId).populate('products')
-    console.log('user', user)
 
     const products = user?.products as IProductSchema[] | undefined
     const product = products?.find(p => p._id.toString() === productId)
@@ -66,5 +74,19 @@ export class ProductRepository {
       { _id: product },
       { $set: data }
     )
+  }
+
+  async deleteProduct(userId: string, productId: string): Promise<void> {
+    const product = await Products.findById(productId)
+    if (!product) throw new ProductNotFoundError()
+
+    const user = await User.findById(userId)
+
+    const role = user?.role
+    const owner = product?.owner
+
+    if (userId !== owner.toString() && !role?.includes('Admin')) {
+      throw new ForbiddenUserError({ reason: 'You do not have permission to delete this item' })
+    }
   }
 }

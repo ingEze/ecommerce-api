@@ -15,5 +15,6 @@ productsRoute.get('/products/:id', authWithRefreshMiddleware, controller.getProd
 // Role @Seller
 productsRoute.post('/products', authWithRefreshMiddleware, roleSellerMiddleware, controller.addProduct)
 productsRoute.patch('/products/:id', authWithRefreshMiddleware, roleSellerMiddleware, controller.updateProduct)
+productsRoute.delete('/products/:id', authWithRefreshMiddleware, roleSellerMiddleware, controller.deletedProduct)
 
 export default productsRoute
