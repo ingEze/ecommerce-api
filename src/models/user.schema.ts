@@ -18,8 +18,12 @@ const UserSchema = new mongoose.Schema<IUser>({
   },
   role: {
     type: [String],
-    enum: ['User', 'Seller', 'Admin'],
+    enum: ['User', 'Admin'],
     default: ['User']
+  },
+  isActive: {
+    type: Boolean,
+    default: false
   },
   products: [
     {

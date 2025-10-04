@@ -22,7 +22,13 @@ const ProductSchema = new mongoose.Schema<IProductSchema>({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
-  }
-},{ timestamps: true })
+  },
+  deletedAt: Date
+},{ timestamps: true , toJSON: { virtuals: true }, toObject: { virtuals: true } }
+)
+
+ProductSchema.virtual('inStock').get(function() {
+  return this.quantity > 0
+})
 
 export const Products = mongoose.model('Products', ProductSchema)

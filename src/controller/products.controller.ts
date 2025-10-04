@@ -2,8 +2,9 @@ import { BadRequestError, ValidationProductError } from '@ingeze/api-error'
 import { NextFunction, Request, Response } from 'express'
 import { validatePaginationParams } from 'src/dtos/pagination.dto.js'
 import { ProductUpdateValidation, ProductValidation } from 'src/dtos/product.dto.js'
+import { validateQuerys } from 'src/dtos/productsQuery.dto.js'
 import { ProductsService } from 'src/service/products.service.js'
-import { ProductDto } from 'src/types/product.types.js'
+import { IQueryDTO, ProductDto } from 'src/types/product.types.js'
 import { getCurrentUserById } from 'src/utils/getCurrentUserID.js'
 
 export class ProtectedController {
@@ -12,21 +13,33 @@ export class ProtectedController {
     try {
       const page = parseInt(req.query.page as string) || 1
       const limit = parseInt(req.query.limit as string) || 20
-      const username = req.query.user as string | undefined
-      const title = req.query.title as string | undefined
 
+      const querys: IQueryDTO = {
+        username: req.query.user?.toString(),
+        search: req.query.search?.toString(),
+
+        minPrice: req.query.minPrice === 'free'
+          ? 'free'
+          : req.query.minPrice
+            ? Number(req.query.minPrice)
+            : undefined,
+
+        maxPrice: req.query.maxPrice
+          ? Number(req.query.maxPrice)
+          : undefined,
+
+        sort: typeof req.query.sort === 'string' &&
+        (req.query.sort === 'price_asc' || req.query.sort === 'price_desc')
+          ? req.query.sort
+          : undefined
+      }
+
+      validateQuerys(querys)
       validatePaginationParams(page || 1, limit || 20)
 
-      const result = await this.productsService.getAllProducts(page, limit, username, title)
-      const products = result.products
+      const result = await this.productsService.getAllProducts(page, limit, querys)
 
-      const pagination = {
-        current_page: result.page,
-        limit: result.limit,
-        total_products: result.totalProducts,
-        total_page: result.totalPage,
-        count: result.products.length
-      }
+      const { products, ...pagination } = result
 
       if (result.products.length === 0) {
         res.status(200).json({
@@ -100,7 +113,6 @@ export class ProtectedController {
       const userId = getCurrentUserById(req)
 
       const result = await this.productsService.updateProduct(userId, productId, validateData)
-      console.log(result)
 
       res.status(200).json({
         success: true,
@@ -115,10 +127,10 @@ export class ProtectedController {
 
   deletedProduct = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { id } = req.params
+      const { id: productId } = req.params
       const userId = getCurrentUserById(req)
 
-      await this.productsService.deleteProduct(userId, id)
+      await this.productsService.deleteProduct(userId, productId)
 
       res.status(204).send()
     } catch (err) {

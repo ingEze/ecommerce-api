@@ -1,6 +1,9 @@
 import { InvalidTokenError, UnauthorizedError } from '@ingeze/api-error'
 import { Request, Response, NextFunction } from 'express'
+import { UserRepository } from 'src/repository/user.repository.js'
 import { generateAuthToken, verifyAuthToken, verifyRefreshToken } from 'src/utils/jwt.js'
+
+const userRepository = new UserRepository()
 
 export const refreshTokenMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   try {
@@ -24,7 +27,7 @@ export const refreshTokenMiddleware = (req: Request, res: Response, next: NextFu
   }
 }
 
-export const accessTokenMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+export const accessTokenMiddleware = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { access_token } = req.cookies
     if (!access_token) {
@@ -32,10 +35,12 @@ export const accessTokenMiddleware = (req: Request, res: Response, next: NextFun
     }
 
     const decoded = verifyAuthToken(access_token) as { _id: string }
-    console.log('DECODED ACCESS TOKEN MIDDLEWARE:', decoded)
     if (typeof decoded !== 'object' || !decoded._id) {
       throw new InvalidTokenError({ reason: 'Invalid token format' })
     }
+
+    const userStatus = await userRepository.getStatusAccount(decoded._id)
+    if (!userStatus) throw new UnauthorizedError({ reason: 'Account disabled' })
 
     req.user = decoded
 

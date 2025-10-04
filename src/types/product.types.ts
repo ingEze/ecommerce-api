@@ -4,8 +4,12 @@ export interface IProductsService {
   getAllProducts(
     page?: number,
     limit?: number,
-    username?: string,
-    title?: string
+    data?: {
+      username?: string,
+      title?: string,
+      minPrice?: number | string,
+      maxPrice?: number
+    }
   ): Promise<IGetAllProducts>
 
   getProductById(productId: string): Promise<ProductDto>
@@ -27,7 +31,9 @@ export interface IProductSchema extends Document {
   price: number
   description: string
   quantity: number
+  isStock: boolean
   owner: Schema.Types.ObjectId
+  deletedAt: Date
 }
 
 export interface ProductDto {
@@ -50,4 +56,12 @@ export interface IGetAllProducts {
   totalPage: number
   totalProducts: number
   products: IProductSchema[]
+}
+
+export interface IQueryDTO {
+  username?: string
+  search?: string
+  minPrice?: number | string
+  maxPrice?: number
+  sort?: 'price_asc' | 'price_desc'
 }

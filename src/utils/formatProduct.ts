@@ -9,7 +9,10 @@ export async function formatProducts(product: IProductSchema): Promise<IProductS
     id: _id.toString(),
     ...rest,
     owner: ownerData && typeof ownerData === 'object'
-      ? { id: ownerData?._id.toString(), username: ownerData?.username }
+      ? {
+        id: ownerData?._id.toString(),
+        username: ownerData?.username
+      }
       : owner
   }
 }

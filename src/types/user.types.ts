@@ -12,6 +12,12 @@ export interface IUser extends Document {
   password: string
   createdAt: Date
   updatedAt: Date
-  role: Array<'User' | 'Seller' | 'Admin'>
+  role: Array<'User' | 'Admin'>
+  isActive: boolean
   products: Types.ObjectId
 }
+
+export interface IUpdateUsernameDTO { newUsername: string, password: string }
+export interface IUpdatePasswordDTO { newPassword: string, password: string }
+export interface IUpdateEmailDTO { newEmail: string, password: string }
+export interface IUpdateStatusAccountDTO { isActive: boolean, password: string }

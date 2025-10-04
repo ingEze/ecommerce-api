@@ -1,0 +1,131 @@
+import { BadRequestError, NotFoundError } from '@ingeze/api-error'
+import { OrderDto } from 'src/dtos/order.dto.js'
+import { PaymentDto } from 'src/dtos/payment.dto.js'
+import { OrderRepository } from 'src/repository/order.repository.js'
+import { IOrder } from 'src/types/order.types.js'
+import { IPayment, PaymentResponse, PaymentStatus } from 'src/types/payment.types.js'
+
+export class OrderService {
+  constructor(private readonly orderRepoitory: OrderRepository) {}
+
+  async createOrder(data: OrderDto): Promise<IOrder> {
+    const productIds = data.items.map(p => p.productId)
+
+    const stockMap = await this.orderRepoitory.checkStock(productIds)
+
+    for (const item of data.items) {
+      const stock = stockMap.get(item.productId) ?? 0
+      if (stock <= 0) {
+        throw new BadRequestError({
+          productId: item.productId,
+          reason: `Product "${item.title}" don't stock`
+        })
+      }
+
+      if (item.quantity > stock) {
+        throw new BadRequestError({
+          productId: item.productId,
+          reason: `Insufficient stock for product "${item.title}". Available ${stock}, Requested: ${item.quantity}`
+        })
+      }
+    }
+
+    const itemsWithOwner = await Promise.all(
+      data.items.map(async(item) => ({
+        ...item,
+        owner: await this.orderRepoitory.getOwners(item.productId)
+      }))
+    )
+
+    const total = data.items.reduce(
+      (acc, item) => acc + item.quantity * item.price,
+      0
+    )
+    const totalWithWax = total * 1.21 // 21% IVA
+
+    const orderData: IOrder = {
+      userId: data.userId,
+      items: itemsWithOwner,
+      total: total,
+      totalWithWax: totalWithWax,
+      status: 'pending',
+      shippingAddress: data.shippingAddress
+    }
+
+    return await this.orderRepoitory.createOrder(orderData)
+  }
+
+  async processPayment(paymentData: PaymentDto, orderId: string): Promise<PaymentResponse> {
+    const order = await this.orderRepoitory.findPendingOrderById(orderId)
+    if (!order) throw new NotFoundError({ reason: 'Order not found or already processed' })
+
+    let transactionId = ''
+    let paymentStatus: PaymentStatus = 'processing'
+
+    if (paymentData.method === 'credit_card') {
+      console.log('Processing credit card...')
+      if (!paymentData.details?.cardNumber || !paymentData.details?.cvv) {
+        throw new BadRequestError({ reason: 'Invalid credit card information' })
+      }
+
+      transactionId = `CC-${Date.now()}-${Math.random().toString(36)}`
+      paymentStatus = Math.random() > 0.1 ? 'pending' : 'failed'
+
+    } else if (paymentData.method === 'paypal') {
+      console.log('Processing PayPal...')
+
+      transactionId = `PP-${Date.now()}-${Math.random().toString(36)}`
+      paymentStatus = Math.random() > 0.1 ? 'pending' : 'failed'
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const _exhaustiveCheck: never = paymentData
+      throw new BadRequestError({ reason: 'Payment method not supported' })
+    }
+
+    if (paymentStatus === 'failed') {
+      throw new BadRequestError({
+        reason: 'Payment processing failed. Please verify your payment information.'
+      })
+    }
+
+    const paymentRecord: IPayment = {
+      orderId: orderId,
+      method: paymentData.method,
+      transactionId,
+      amount: order.totalWithWax || order.total,
+      currency: 'USD',
+      status: paymentStatus,
+      payerEmail: paymentData.method === 'paypal' ? 'demo@paypal.com' : undefined
+    }
+
+    return await this.orderRepoitory.createPaymentRecord(paymentRecord)
+  }
+
+  async confirmPayment(orderId: string): Promise<{ order: IOrder, payment: PaymentResponse }> {
+    const successfulPayment = await this.orderRepoitory.getPendingPaymentByOrderId(orderId)
+    if (!successfulPayment) {
+      throw new NotFoundError({ reason: 'No successful payment found for this order' })
+    }
+
+    const updatedOrder = await this.orderRepoitory.processPaymentWithTransaction(orderId)
+    if (!updatedOrder) {
+      throw new BadRequestError({ reason: 'Failed to complete payment transaction' })
+    }
+
+    const updateProcessPayment = await this.orderRepoitory.updateProcessPaymentToStatusPaid(orderId)
+    if (!updateProcessPayment) {
+      throw new BadRequestError({ reason: 'Failed to update status in process payment' })
+    }
+
+    return {
+      order: updatedOrder,
+      payment: updateProcessPayment
+    }
+  }
+
+  async getOrderPayments(orderId: string): Promise<IPayment[]> {
+    const orders = await this.orderRepoitory.getPaymentsByOrderId(orderId)
+    if (!orders) throw new NotFoundError({ reason: 'Orders not found' })
+    return orders
+  }
+}

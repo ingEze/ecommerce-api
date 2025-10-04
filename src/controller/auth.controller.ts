@@ -1,6 +1,6 @@
-import { UnauthorizedError } from '@ingeze/api-error'
+import { BadRequestError, UnauthorizedError } from '@ingeze/api-error'
 import { Request, Response, NextFunction } from 'express'
-import { loginOrResetValidation, registerValidationData } from 'src/dtos/auth.dto.js'
+import { ValidateLogin, registerValidationData, ValidateResetPassword, ValidateEmail } from 'src/dtos/auth.dto.js'
 import { AuthService } from 'src/service/auth.service.js'
 import { checkRequiredFields } from 'src/utils/dataEmptyError.js'
 import { generateAuthToken } from 'src/utils/jwt.js'
@@ -8,7 +8,7 @@ import { generateAuthToken } from 'src/utils/jwt.js'
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  register = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+  registerAndSendValidateMail = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const data = registerValidationData(req.body)
 
@@ -17,7 +17,23 @@ export class AuthController {
 
       res.status(201).json({
         success: true,
-        messahe: 'User created'
+        message: 'A verification email has been sent'
+      })
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  activateAccount = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { token } = req.params
+      if (!token) throw new BadRequestError({ reason: 'Token not provided' })
+
+      await this.authService.activeAccount(token)
+
+      res.status(200).json({
+        success: true,
+        message: 'Mail validated successfully'
       })
     } catch (err) {
       next(err)
@@ -26,11 +42,10 @@ export class AuthController {
 
   login = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const data = loginOrResetValidation(req.body)
+      const data = ValidateLogin(req.body)
       checkRequiredFields(data)
 
       const token = await this.authService.login(data)
-
       const CONFIG_COOKIE = {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -55,19 +70,47 @@ export class AuthController {
     }
   }
 
-  resetPassword = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+  requestPasswordReset = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const data = loginOrResetValidation(req.body)
+      const data = ValidateEmail(req.body)
+      if (!data) {
+        throw new BadRequestError({ reason: 'Invalid email data provided' })
+      }
 
       checkRequiredFields(data)
+
+      await this.authService.requestPasswordReset(data)
+
+      res.status(200).json({
+        success: true,
+        message: 'Password reset code sent to your email'
+      })
+
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  resetPassword = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { token } = req.params
+
+      const validateData = ValidateResetPassword(req.body)
+      if (!validateData) {
+        throw new BadRequestError({ reason: 'Invalid password reset data provided' })
+      }
+
+      const data = {
+        token: token,
+        password: validateData.password
+      }
 
       await this.authService.resetPassword(data)
 
       res.status(200).json({
         success: true,
-        message: 'Password change successfully'
+        message: 'Password updated successfully'
       })
-
     } catch (err) {
       next(err)
     }
@@ -84,7 +127,7 @@ export class AuthController {
       res
         .cookie('access_token', accessToken, {
           httpOnly: true,
-          secure: true,
+          secure: process.env.NODE_ENV === 'production',
           sameSite: 'strict' as const,
           maxAge: 15 * 60 * 1000
         })

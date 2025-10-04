@@ -1,5 +1,5 @@
 import { ForbiddenUserError, ProductNotFoundError, UserNotFoundError } from '@ingeze/api-error'
-import { ObjectId } from 'mongoose'
+import { ObjectId, FilterQuery } from 'mongoose'
 import { Products } from 'src/models/product.schema.js'
 import { User } from 'src/models/user.schema.js'
 import { IProductSchema, ProductDto, ProductUpdateDto } from 'src/types/product.types.js'
@@ -9,22 +9,46 @@ export class ProductRepository {
     return await Products.countDocuments(filter)
   }
 
-  async getAllProducts(page: number, limit: number, filter: { title?: string } = {}): Promise<IProductSchema[]> {
-    let products
+  async getAllProducts(
+    page: number,
+    limit: number,
+    filter: {
+      title?: string,
+      minPrice?: number | string,
+      maxPrice?: number,
+      sort?: 'price_asc' | 'price_desc'
+    } = {}
+  ): Promise<IProductSchema[]> {
 
-    if (filter?.title) {
-      products = await Products
-        .find({
-          title: { $regex: filter.title, $options: 'i' }
-        })
-
-      return products
+    const query: FilterQuery<IProductSchema> = {
+      deletedAt: { $exists: false },
+      isActive: true
     }
 
-    products = await Products
-      .find(filter)
+    if (filter?.title) {
+      query.title = { $regex: filter.title, $options: 'i' }
+    }
+
+    if (filter?.minPrice || filter?.maxPrice) query.price = {}
+
+    if (filter.minPrice) {
+      if (filter.minPrice === 'free') {
+        query.price.$eq = 0
+      } else {
+        query.price.$gte = Number(filter.minPrice)
+      }
+    }
+
+    if (filter.maxPrice) {
+      query.price.$lte = filter.maxPrice
+    }
+
+    const sortOrder = filter.sort === 'price_desc' ? -1 : 1
+    const products = await Products
+      .find(query)
       .skip((page - 1) * limit)
       .limit(limit)
+      .sort({ price: sortOrder })
 
     return products
   }
@@ -36,13 +60,19 @@ export class ProductRepository {
   }
 
   async getProductById(productId: string): Promise<IProductSchema> {
-    const product = await Products.findById(productId)
+    const product = await Products.findOne({
+      _id: productId,
+      deletedAt: { $exists: false }
+    })
     if (!product) throw new ProductNotFoundError()
     return product
   }
 
   async createProducts(userId: string, data: ProductDto): Promise<IProductSchema> {
-    const existingProduct = await Products.findOne({ title: data.title, owner: userId })
+    const existingProduct = await Products.findOne({
+      title: data.title,
+      owner: userId
+    })
     if (existingProduct) {
       existingProduct.quantity += data.quantity ? data.quantity : 1
       await existingProduct.save()
@@ -88,5 +118,7 @@ export class ProductRepository {
     if (userId !== owner.toString() && !role?.includes('Admin')) {
       throw new ForbiddenUserError({ reason: 'You do not have permission to delete this item' })
     }
+
+    await Products.findByIdAndUpdate(product._id, { deletedAt: new Date() })
   }
 }

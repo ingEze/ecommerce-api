@@ -7,10 +7,13 @@ const authRoute = Router()
 
 const controller = new AuthController(new AuthService())
 
-authRoute.post('/register', controller.register)
+authRoute.post('/register', controller.registerAndSendValidateMail)
+
 authRoute.post('/login', controller.login)
 
-authRoute.post('/reset-password', controller.resetPassword)
+authRoute.patch('/forgot-password', controller.requestPasswordReset)
+authRoute.patch('/reset-password/:token', controller.resetPassword)
 
-authRoute.post('/refresh-token', refreshTokenMiddleware, controller.refreshToken)
+authRoute.post('/refresh', refreshTokenMiddleware, controller.refreshToken)
+
 export default authRoute

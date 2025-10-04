@@ -8,17 +8,34 @@ const userRepository = new UserRepository
 export class ProductsService implements IProductsService {
   constructor(private readonly productRepository: ProductRepository) {}
 
-  async getAllProducts(page: number = 1, limit: number = 20, username?: string, title?: string): Promise<IGetAllProducts> {
-    const filter: Record<string, string> = {}
+  async getAllProducts(
+    page: number = 1,
+    limit: number = 20,
+    data: {
+      username?: string,
+      search?: string,
+      minPrice?: number | string,
+      maxPrice?: number,
+      sort?: 'price_asc' | 'price_desc'
+    }): Promise<IGetAllProducts> {
+    const filter: Record<string, string | number> = {}
 
-    if (username) {
-      const user = await userRepository.findUserByUsername(username)
+    if (data.username) {
+      const user = await userRepository.findUserByUsername(data.username)
       if (!user) throw new UserNotFoundError()
       filter.owner = user._id
     }
 
-    if (title) {
-      filter.title = title
+    if (data.minPrice) {
+      filter.minPrice = data.minPrice
+    }
+
+    if (data.search) {
+      filter.title = data.search
+    }
+
+    if (data.sort) {
+      filter.sort = data.sort
     }
 
     const totalProducts = await this.productRepository.getMountProducts(filter)

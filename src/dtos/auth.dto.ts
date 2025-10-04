@@ -12,11 +12,11 @@ const RegisterSchema = z.object({
     .string()
     .min(8, 'Password must be 8 characters or more'),
   role: z
-    .enum(['User', 'Seller'])
+    .enum(['User'])
     .optional()
 }).strict()
 
-const LoginOrResetPasswordSchema = z.object({
+const LoginSchema = z.object({
   email: z
     .string()
     .email(),
@@ -25,8 +25,20 @@ const LoginOrResetPasswordSchema = z.object({
     .min(8, 'Password must be 8 character or more')
 }).strict()
 
+const ResetPasswordSchema = z.object({
+  password: z
+    .string()
+    .min(8)
+})
+
+const EmailSchema = z.object({
+  email: z.string().email().min(3)
+})
+
 export type AuthDto = z.infer<typeof RegisterSchema>
-export type LoginOrResetPasswordDto = z.infer<typeof LoginOrResetPasswordSchema>
+export type LoginDto = z.infer<typeof LoginSchema>
+export type ResetPasswordDto = z.infer<typeof ResetPasswordSchema>
+export type EmailDto = z.infer<typeof EmailSchema>
 
 export function registerValidationData(input: AuthDto): AuthDto {
   const result = RegisterSchema.safeParse(input)
@@ -36,10 +48,24 @@ export function registerValidationData(input: AuthDto): AuthDto {
   return result.data
 }
 
-export function loginOrResetValidation(input: LoginOrResetPasswordDto): LoginOrResetPasswordDto {
-  const result = LoginOrResetPasswordSchema.safeParse(input)
+export function ValidateLogin(input: LoginDto): LoginDto {
+  const result = LoginSchema.safeParse(input)
   if (!result.success) {
     throw result.error
   }
+  return result.data
+}
+
+export function ValidateResetPassword(input: ResetPasswordDto): ResetPasswordDto {
+  const result = ResetPasswordSchema.safeParse(input)
+  if (!result.success) {
+    throw result.error
+  }
+  return result.data
+}
+
+export function ValidateEmail(input: EmailDto): EmailDto {
+  const result = EmailSchema.safeParse(input)
+  if (!result.success) throw result.error
   return result.data
 }
