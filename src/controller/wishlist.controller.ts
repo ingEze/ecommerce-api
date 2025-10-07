@@ -51,4 +51,20 @@ export class WishlistController {
       next(err)
     }
   }
+
+  deleteProductToWishlist = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = getCurrentUserById(req)
+      const { productId } = req.params
+
+      await this.wishlistService.deleteProductToWishlist(userId, productId)
+
+      res.status(200).json({
+        success: true,
+        message: 'Product removed successfully'
+      })
+    } catch (err) {
+      next(err)
+    }
+  }
 }

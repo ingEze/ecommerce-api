@@ -22,6 +22,7 @@ export class ProductRepository {
 
     const query: FilterQuery<IProductSchema> = {
       deletedAt: { $exists: false },
+      quantity: { $gt: 0 },
       isActive: true
     }
 
@@ -119,6 +120,9 @@ export class ProductRepository {
       throw new ForbiddenUserError({ reason: 'You do not have permission to delete this item' })
     }
 
-    await Products.findByIdAndUpdate(product._id, { deletedAt: new Date() })
+    await Products.findByIdAndUpdate(
+      product._id,
+      { deletedAt: new Date(), isActive: false }
+    )
   }
 }

@@ -132,7 +132,10 @@ export class ProtectedController {
 
       await this.productsService.deleteProduct(userId, productId)
 
-      res.status(204).send()
+      res.status(200).json({
+        success: true,
+        message: 'Product removed successfully'
+      })
     } catch (err) {
       next(err)
     }

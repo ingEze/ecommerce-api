@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Schema, Types, model } from 'mongoose'
 
 const wishlistSchema = new Schema({
@@ -20,20 +20,12 @@ const wishlistSchema = new Schema({
 { timestamps: true,
   versionKey: false,
   toJSON: {
-    transform: (doc, ret): Record<string, any> => {
+    transform: (doc, ret): void => {
       ret.userId = ret._id.toString()
 
       delete ret._id
       delete ret.updatedAt
       delete ret.createdAt
-
-      if (ret.products) {
-        ret.products = ret.products.map((p: any) => {
-          delete p._id
-          return p
-        })
-      }
-      return ret
     }
   }
 })

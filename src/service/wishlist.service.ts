@@ -21,4 +21,8 @@ export class WishlistService {
   async getProductToWishlist(userId: string): Promise<IWishlistPopulated> {
     return await this.wishlistRepository.getProducts(userId)
   }
+
+  async deleteProductToWishlist(userId: string, wishlistProductId: string): Promise<void> {
+    await this.wishlistRepository.deleteProductToWishlist(userId, wishlistProductId)
+  }
 }

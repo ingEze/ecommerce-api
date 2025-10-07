@@ -31,7 +31,7 @@ export interface IProductSchema extends Document {
   price: number
   description: string
   quantity: number
-  isStock: boolean
+  isActive: boolean
   owner: Schema.Types.ObjectId
   deletedAt: Date
 }

@@ -18,6 +18,11 @@ const ProductSchema = new mongoose.Schema<IProductSchema>({
     type: Number,
     default: 1
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+    required: true
+  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

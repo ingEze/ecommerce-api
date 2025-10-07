@@ -41,7 +41,6 @@ export class ProductsService implements IProductsService {
     const totalProducts = await this.productRepository.getMountProducts(filter)
     const totalPage = Math.ceil(totalProducts / limit)
     const products = await this.productRepository.getAllProducts(page, limit, filter)
-
     if (!products) {
       throw new BadRequestError({
         reason: 'No products found for the requested page'

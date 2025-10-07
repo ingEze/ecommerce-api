@@ -44,4 +44,11 @@ export class WishlistRepository {
 
     return response
   }
+
+  async deleteProductToWishlist(userId: string, wishlistProductId: string): Promise<void> {
+    await Wishlist.updateOne(
+      { userId },
+      { $pull: { products: { productId: wishlistProductId } } }
+    )
+  }
 }
