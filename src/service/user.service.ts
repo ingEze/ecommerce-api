@@ -3,10 +3,16 @@ import { UserRepository } from 'src/repository/user.repository.js'
 import { IGetAllProducts } from 'src/types/product.types.js'
 import { formatProducts } from 'src/utils/formatProduct.js'
 import { comparePassword, hashedPassword } from 'src/utils/hashPassword.js'
+import { verifyAccountActivationToken } from 'src/utils/jwt.js'
 import { paginate } from 'src/utils/pagination.js'
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
+
+  async activeAccount(token: string): Promise<void> {
+    const userId = verifyAccountActivationToken(token)
+    await this.userRepository.updateStatusAccount(true, userId)
+  }
 
   async getProductsByUser(page: number, limit: number, username: string): Promise<IGetAllProducts> {
     const allProducts = await this.userRepository.getProducts(username)

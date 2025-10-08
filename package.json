@@ -1,5 +1,6 @@
 {
-  "name": "mini-ecommerce-api",
+  "name": "ecommerce-api",
+  "description": "An e-commerce API built with Node.js, TypeScript, Express, and MongoDB. Features user & admin roles, product and order management, payment simulation, email verification, and more.",
   "version": "1.0.0",
   "main": "dist/main.js",
   "type": "module",
@@ -16,7 +17,6 @@
   "keywords": [],
   "author": "Ezequiel Saucedo",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@eslint/js": "^9.29.0",
     "@types/bcrypt": "^5.0.2",
@@ -25,6 +25,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.3",
     "@types/nodemailer": "^7.0.1",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "esbuild": "^0.25.5",
     "eslint": "^9.29.0",
     "globals": "^16.2.0",
@@ -38,9 +40,12 @@
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.0",
     "nodemailer": "^7.0.6",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "zod": "^3.25.67"
   }
 }

@@ -24,22 +24,6 @@ export class AuthController {
     }
   }
 
-  activateAccount = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const { token } = req.params
-      if (!token) throw new BadRequestError({ reason: 'Token not provided' })
-
-      await this.authService.activeAccount(token)
-
-      res.status(200).json({
-        success: true,
-        message: 'Mail validated successfully'
-      })
-    } catch (err) {
-      next(err)
-    }
-  }
-
   login = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const data = ValidateLogin(req.body)

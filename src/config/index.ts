@@ -6,7 +6,8 @@ export const config = {
     URI: process.env.MONGO_URI || 'mongodb://localhost:27017/mini-ecommerce-api'
   },
   url: {
-    APP_URL: process.env.APP_URL
+    APP_URL: process.env.APP_URL || 'http://localhost',
+    PORT: process.env.PORT || 3033
   },
   adminUser: {
     ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'admin@example.com',

@@ -8,6 +8,22 @@ import { getCurrentUserById } from 'src/utils/getCurrentUserID.js'
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  activateAccount = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { token } = req.params
+      if (!token) throw new BadRequestError({ reason: 'Token not provided' })
+
+      await this.userService.activeAccount(token)
+
+      res.status(200).json({
+        success: true,
+        message: 'Mail validated successfully'
+      })
+    } catch (err) {
+      next(err)
+    }
+  }
+
   getAllProducts = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const page = parseInt(req.query.page as string) || 1
