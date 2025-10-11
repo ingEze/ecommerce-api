@@ -1,8 +1,8 @@
 import { NotFoundError } from '@ingeze/api-error'
-import { IWishlist, IWishlistPopulated } from 'src/types/wishlist.types.js'
-import { ProductRepository } from 'src/repository/products.repository.js'
-import { WishlistRepository } from 'src/repository/wishlist.repository.js'
-import { IWishlistProductInput } from 'src/types/wishlist.types.js'
+import { IWishlist, IWishlistPopulated } from 'src/types/wishlist.types'
+import { ProductRepository } from 'src/repository/products.repository'
+import { WishlistRepository } from 'src/repository/wishlist.repository'
+import { IWishlistProductInput } from 'src/types/wishlist.types'
 
 export class WishlistService {
   constructor(private readonly wishlistRepository: WishlistRepository) {}

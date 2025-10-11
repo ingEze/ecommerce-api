@@ -1,6 +1,6 @@
 import { BadRequestError } from '@ingeze/api-error'
-import { Wishlist } from 'src/models/wishlist.schema.js'
-import { IWishlist, IWishlistProductInput, IWishlistPopulated } from 'src/types/wishlist.types.js'
+import { Wishlist } from 'src/models/wishlist.schema'
+import { IWishlist, IWishlistProductInput, IWishlistPopulated } from 'src/types/wishlist.types'
 
 export class WishlistRepository {
   async addProduct(data: IWishlistProductInput): Promise<IWishlist> {

@@ -1,5 +1,5 @@
-import { config } from 'src/config/index.js'
-import { Database } from '../database.js'
+import { config } from 'src/config/index'
+import { Database } from '../database'
 
 const uri = config.db.URI
 

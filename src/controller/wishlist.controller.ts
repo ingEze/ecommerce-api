@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
-import { WishlistService } from 'src/service/wishlist.service.js'
-import { getCurrentUserById } from 'src/utils/getCurrentUserID.js'
+import { WishlistService } from 'src/service/wishlist.service'
+import { getCurrentUserById } from 'src/utils/getCurrentUserID'
 
 export class WishlistController {
   constructor(private readonly wishlistService: WishlistService) {}

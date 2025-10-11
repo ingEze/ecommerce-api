@@ -1,6 +1,6 @@
 import { ForbiddenUserError, UnauthorizedError } from '@ingeze/api-error'
 import { NextFunction, Request, Response } from 'express'
-import { UserRepository } from 'src/repository/user.repository.js'
+import { UserRepository } from 'src/repository/user.repository'
 
 export const roleUserMiddleware = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

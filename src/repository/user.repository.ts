@@ -1,9 +1,9 @@
 import { UserNotFoundError } from '@ingeze/api-error'
-import { AuthDto } from 'src/dtos/auth.dto.js'
-import { Products } from 'src/models/product.schema.js'
-import { User } from 'src/models/user.schema.js'
-import { IProductSchema } from 'src/types/product.types.js'
-import { IUser } from 'src/types/user.types.js'
+import { AuthDto } from 'src/dtos/auth.dto'
+import { Products } from 'src/models/product.schema'
+import { User } from 'src/models/user.schema'
+import { IProductSchema } from 'src/types/product.types'
+import { IUser } from 'src/types/user.types'
 
 export class UserRepository {
   async findUserById(userId: string): Promise<IUser | undefined> {

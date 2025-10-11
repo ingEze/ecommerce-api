@@ -1,9 +1,9 @@
-import { AuthDto, EmailDto, LoginDto, ValidateLogin } from 'src/dtos/auth.dto.js'
+import { AuthDto, EmailDto, LoginDto, ValidateLogin } from 'src/dtos/auth.dto'
 import { BadRequestError, EmailNotFoundError, InvalidCredentialsError, UnauthorizedError, UserNotFoundError } from '@ingeze/api-error'
-import { UserRepository } from 'src/repository/user.repository.js'
-import { comparePassword, hashedPassword } from 'src/utils/hashPassword.js'
-import { generateAccountActivationToken, generateAuthToken, generateRefreshToken, generateResetTokenForMail, verifyResetTokenForMail } from 'src/utils/jwt.js'
-import { EmailService } from './email.service.js'
+import { UserRepository } from 'src/repository/user.repository'
+import { comparePassword, hashedPassword } from 'src/utils/hashPassword'
+import { generateAccountActivationToken, generateAuthToken, generateRefreshToken, generateResetTokenForMail, verifyResetTokenForMail } from 'src/utils/jwt'
+import { EmailService } from './email.service'
 
 const emailService = new EmailService()
 const userRepository = new UserRepository()

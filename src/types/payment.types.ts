@@ -24,14 +24,14 @@ interface PaypalPayment extends BasePayment {
 }
 
 export interface PaymentResponse {
-    paymentId: string
-    orderId: string
-    method: 'credit_card' | 'paypal'
-    amount: number
-    status: PaymentStatus
-    currency: string
-    transactionId: string
-    createdAt: Date
+  paymentId: string
+  orderId: string
+  method: 'credit_card' | 'paypal'
+  amount: number
+  status: PaymentStatus
+  currency: string
+  transactionId: string
+  createdAt: Date
 }
 
 export type IPayment = CreditCardPayment | PaypalPayment

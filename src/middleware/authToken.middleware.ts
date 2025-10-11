@@ -1,7 +1,7 @@
 import { InvalidTokenError, UnauthorizedError } from '@ingeze/api-error'
 import { Request, Response, NextFunction } from 'express'
-import { UserRepository } from 'src/repository/user.repository.js'
-import { generateAuthToken, verifyAuthToken, verifyRefreshToken } from 'src/utils/jwt.js'
+import { UserRepository } from 'src/repository/user.repository'
+import { generateAuthToken, verifyAuthToken, verifyRefreshToken } from 'src/utils/jwt'
 
 const userRepository = new UserRepository()
 

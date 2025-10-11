@@ -1,5 +1,5 @@
 import { Schema, Types, model } from 'mongoose'
-import { PaymentResponse } from 'src/types/payment.types.js'
+import { PaymentResponse } from 'src/types/payment.types'
 
 const ProcessPaymentSchema = new Schema({
   orderId: {

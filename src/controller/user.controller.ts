@@ -1,9 +1,9 @@
 import { BadRequestError } from '@ingeze/api-error'
 import { Request, Response, NextFunction } from 'express'
-import { validatePaginationParams } from 'src/dtos/pagination.dto.js'
-import { validateUpdateEmail, validateUpdatePassword, validateUpdateStatusAccount, validateUpdateUsername } from 'src/dtos/userParams.dto.js'
-import { UserService } from 'src/service/user.service.js'
-import { getCurrentUserById } from 'src/utils/getCurrentUserID.js'
+import { validatePaginationParams } from 'src/dtos/pagination.dto'
+import { validateUpdateEmail, validateUpdatePassword, validateUpdateStatusAccount, validateUpdateUsername } from 'src/dtos/userParams.dto'
+import { UserService } from 'src/service/user.service'
+import { getCurrentUserById } from 'src/utils/getCurrentUserID'
 
 export class UserController {
   constructor(private readonly userService: UserService) {}

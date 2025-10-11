@@ -1,19 +1,19 @@
 import { Router } from 'express'
-import { authWithRefreshMiddleware, checkIsActive, roleUserMiddleware } from 'src/middleware/index.js'
-import { ProtectedController } from 'src/controller/products.controller.js'
-import { ProductsService } from 'src/service/products.service.js'
-import { ProductRepository } from 'src/repository/products.repository.js'
+import { authWithRefreshMiddleware, checkIsActive, roleUserMiddleware } from 'src/middleware/index'
+import { ProtectedController } from 'src/controller/products.controller'
+import { ProductsService } from 'src/service/products.service'
+import { ProductRepository } from 'src/repository/products.repository'
 
 const controller = new ProtectedController(new ProductsService(new ProductRepository))
 
 const productsRoute = Router()
 
 /**
-@swagger
-tags:
-name: Products
-description: Endpoints for managing products
-*/
+ * @swagger
+ * tags:
+ *   name: "Products"
+ *   description: Endpoints for managing products
+ */
 
 /**
  * @swagger
@@ -21,7 +21,7 @@ description: Endpoints for managing products
  *   get:
  *     summary: Get all products
  *     description: Retrieve a paginated list of products. Supports filters by user, search, price, and sort.
- *     tags: [Products]
+ *     tags: ["Products"]
  *     parameters:
  *       - in: query
  *         name: page
@@ -108,7 +108,7 @@ productsRoute.get('/products', controller.getAllProducts)
  *   get:
  *     summary: Get product by ID
  *     description: Retrieve a single product by its ID.
- *     tags: [Products]
+ *     tags: ["Products"]
  *     parameters:
  *       - in: path
  *         name: id
@@ -145,7 +145,7 @@ productsRoute.get('/products/:id', controller.getProductById)
  *   post:
  *     summary: Create a new product
  *     description: Add a new product. Requires authentication.
- *     tags: [Products]
+ *     tags: ["Products"]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -185,7 +185,7 @@ productsRoute.post('/products', authWithRefreshMiddleware, checkIsActive, roleUs
  *   patch:
  *     summary: Update a product
  *     description: Update an existing product. Requires authentication.
- *     tags: [Products]
+ *     tags: ["Products"]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -233,7 +233,7 @@ productsRoute.patch('/products/:id', authWithRefreshMiddleware, checkIsActive, r
  *   delete:
  *     summary: Delete a product
  *     description: Delete a product by ID. Requires authentication.
- *     tags: [Products]
+ *     tags: ["Products"]
  *     security:
  *       - bearerAuth: []
  *     parameters:

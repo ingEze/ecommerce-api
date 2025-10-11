@@ -11,7 +11,7 @@ const controller = new OrderController(new OrderService(new OrderRepository()))
 /**
  * @swagger
  * tags:
- *   name: Orders
+ *   name: "Orders"
  *   description: Endpoints for managing orders and payments
  */
 
@@ -21,7 +21,7 @@ const controller = new OrderController(new OrderService(new OrderRepository()))
  *   post:
  *     summary: Create a new order
  *     description: Creates a new order for the authenticated user.
- *     tags: [Orders]
+ *     tags: ["Orders"]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -110,7 +110,7 @@ orderRoute.post('/', authWithRefreshMiddleware, checkIsActive, roleUserMiddlewar
  *   post:
  *     summary: Process payment for an existing order
  *     description: Processes a payment using credit card or PayPal for the given order.
- *     tags: [Orders]
+ *     tags: ["Orders"]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -194,7 +194,7 @@ orderRoute.post('/:orderId/process-payment', authWithRefreshMiddleware, checkIsA
  *   post:
  *     summary: Confirm an order payment
  *     description: Confirms the payment after being processed successfully.
- *     tags: [Orders]
+ *     tags: ["Orders"]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -233,7 +233,7 @@ orderRoute.post('/:orderId/confirm-payment', authWithRefreshMiddleware, checkIsA
  *   get:
  *     summary: Get all payments for a specific order
  *     description: Retrieves all payment attempts for the given order.
- *     tags: [Orders]
+ *     tags: ["Orders"]
  *     security:
  *       - bearerAuth: []
  *     parameters:

@@ -1,10 +1,10 @@
 import { Router } from 'express'
-import { WishlistController } from 'src/controller/wishlist.controller.js'
-import { authWithRefreshMiddleware } from 'src/middleware/authToken.middleware.js'
-import { checkIsActive } from 'src/middleware/checkIsActive.middleware.js'
-import { roleUserMiddleware } from 'src/middleware/userRole.middleware.js'
-import { WishlistRepository } from 'src/repository/wishlist.repository.js'
-import { WishlistService } from 'src/service/wishlist.service.js'
+import { WishlistController } from 'src/controller/wishlist.controller'
+import { authWithRefreshMiddleware } from 'src/middleware/authToken.middleware'
+import { checkIsActive } from 'src/middleware/checkIsActive.middleware'
+import { roleUserMiddleware } from 'src/middleware/userRole.middleware'
+import { WishlistRepository } from 'src/repository/wishlist.repository'
+import { WishlistService } from 'src/service/wishlist.service'
 
 const wishlistRoute = Router()
 const controller = new WishlistController(new WishlistService(new WishlistRepository))
@@ -12,7 +12,7 @@ const controller = new WishlistController(new WishlistService(new WishlistReposi
 /**
  * @swagger
  * tags:
- *   name: Wishlist
+ *   name: "Wishlist"
  *   description: Endpoints for managing user wishlists
  */
 
@@ -24,7 +24,7 @@ const controller = new WishlistController(new WishlistService(new WishlistReposi
  *   get:
  *     summary: Get user's wishlist
  *     description: Retrieve all products in the authenticated user's wishlist.
- *     tags: [Wishlist]
+ *     tags: ["Wishlist"]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -56,7 +56,7 @@ wishlistRoute.get('/', authWithRefreshMiddleware, checkIsActive, roleUserMiddlew
  *   post:
  *     summary: Add product to wishlist
  *     description: Add a product to the authenticated user's wishlist.
- *     tags: [Wishlist]
+ *     tags: ["Wishlist"]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -98,7 +98,7 @@ wishlistRoute.post('/:productId', authWithRefreshMiddleware, checkIsActive, role
  *   delete:
  *     summary: Remove product from wishlist
  *     description: Remove a product from the authenticated user's wishlist.
- *     tags: [Wishlist]
+ *     tags: ["Wishlist"]
  *     security:
  *       - bearerAuth: []
  *     parameters:

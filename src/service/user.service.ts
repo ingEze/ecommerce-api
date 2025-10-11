@@ -1,10 +1,10 @@
 import { BadRequestError, ErrorHandler, ProductNotFoundError, UnauthorizedError, UserNotFoundError } from '@ingeze/api-error'
-import { UserRepository } from 'src/repository/user.repository.js'
-import { IGetAllProducts } from 'src/types/product.types.js'
-import { formatProducts } from 'src/utils/formatProduct.js'
-import { comparePassword, hashedPassword } from 'src/utils/hashPassword.js'
-import { verifyAccountActivationToken } from 'src/utils/jwt.js'
-import { paginate } from 'src/utils/pagination.js'
+import { UserRepository } from 'src/repository/user.repository'
+import { IGetAllProducts } from 'src/types/product.types'
+import { formatProducts } from 'src/utils/formatProduct'
+import { comparePassword, hashedPassword } from 'src/utils/hashPassword'
+import { verifyAccountActivationToken } from 'src/utils/jwt'
+import { paginate } from 'src/utils/pagination'
 
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}

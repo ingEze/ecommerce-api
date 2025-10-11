@@ -1,4 +1,4 @@
-import { PaymentResponse } from 'src/types/payment.types.js'
+import { PaymentResponse } from 'src/types/payment.types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function toPaymentResponse(payment: any): PaymentResponse {

@@ -1,4 +1,4 @@
-import { IUpdateEmailDTO, IUpdatePasswordDTO, IUpdateStatusAccountDTO, IUpdateUsernameDTO } from 'src/types/user.types.js'
+import { IUpdateEmailDTO, IUpdatePasswordDTO, IUpdateStatusAccountDTO, IUpdateUsernameDTO } from 'src/types/user.types'
 import z from 'zod'
 
 const UpdateUsernameSchema = z.object({

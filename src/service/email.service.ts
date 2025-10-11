@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { config } from 'src/config/index.js'
+import { config } from 'src/config/index'
 
 export class EmailService {
   private transporter

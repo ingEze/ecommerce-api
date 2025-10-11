@@ -1,8 +1,8 @@
 import { BadRequestError, UserNotFoundError } from '@ingeze/api-error'
-import { ProductRepository } from 'src/repository/products.repository.js'
-import { IGetAllProducts, IProductsService, ProductDto, ProductUpdateDto } from 'src/types/product.types.js'
-import { formatProducts } from 'src/utils/formatProduct.js'
-import { UserRepository } from 'src/repository/user.repository.js'
+import { ProductRepository } from 'src/repository/products.repository'
+import { IGetAllProducts, IProductsService, ProductDto, ProductUpdateDto } from 'src/types/product.types'
+import { formatProducts } from 'src/utils/formatProduct'
+import { UserRepository } from 'src/repository/user.repository'
 
 const userRepository = new UserRepository
 export class ProductsService implements IProductsService {

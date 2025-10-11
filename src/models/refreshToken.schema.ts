@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { IRefreshToken } from 'src/types/token.types.js'
+import { IRefreshToken } from 'src/types/token.types'
 
 const RefreshTokenSchema = new mongoose.Schema<IRefreshToken>({
   token: String,

@@ -1,4 +1,4 @@
-import { IQueryDTO } from 'src/types/product.types.js'
+import { IQueryDTO } from 'src/types/product.types'
 import z from 'zod'
 
 const querySchema = z.object({

@@ -1,3 +1,3 @@
-export { roleUserMiddleware } from './userRole.middleware.js'
-export { accessTokenMiddleware, authWithRefreshMiddleware, refreshTokenMiddleware } from './authToken.middleware.js'
-export { checkIsActive } from './checkIsActive.middleware.js'
+export { roleUserMiddleware } from './userRole.middleware'
+export { accessTokenMiddleware, authWithRefreshMiddleware, refreshTokenMiddleware } from './authToken.middleware'
+export { checkIsActive } from './checkIsActive.middleware'

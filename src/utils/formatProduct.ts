@@ -1,5 +1,5 @@
-import { UserRepository } from 'src/repository/user.repository.js'
-import { IProductSchema } from 'src/types/product.types.js'
+import { UserRepository } from 'src/repository/user.repository'
+import { IProductSchema } from 'src/types/product.types'
 
 export async function formatProducts(product: IProductSchema): Promise<IProductSchema> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

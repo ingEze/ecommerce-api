@@ -1,7 +1,7 @@
-import productsRoute from './products.routes.js'
-import authRoute from './auth.routes.js'
-import userRoute from './user.routes.js'
-import orderRoute from './orders.routes.js'
-import wishlistRoute from './wishlist.routes.js'
+import productsRoute from './products.routes'
+import authRoute from './auth.routes'
+import userRoute from './user.routes'
+import orderRoute from './orders.routes'
+import wishlistRoute from './wishlist.routes'
 
 export { authRoute, productsRoute, userRoute, orderRoute, wishlistRoute }

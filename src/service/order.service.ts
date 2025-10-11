@@ -6,12 +6,12 @@ import { IOrder } from 'src/types/order.types.js'
 import { IPayment, PaymentResponse, PaymentStatus } from 'src/types/payment.types.js'
 
 export class OrderService {
-  constructor(private readonly orderRepoitory: OrderRepository) {}
+  constructor(private readonly orderRepository: OrderRepository) {}
 
   async createOrder(data: OrderDto): Promise<IOrder> {
     const productIds = data.items.map(p => p.productId)
 
-    const stockMap = await this.orderRepoitory.checkStock(productIds)
+    const stockMap = await this.orderRepository.checkStock(productIds)
 
     for (const item of data.items) {
       const stock = stockMap.get(item.productId) ?? 0
@@ -33,7 +33,7 @@ export class OrderService {
     const itemsWithOwner = await Promise.all(
       data.items.map(async(item) => ({
         ...item,
-        owner: await this.orderRepoitory.getOwners(item.productId)
+        owner: await this.orderRepository.getOwners(item.productId)
       }))
     )
 
@@ -52,11 +52,11 @@ export class OrderService {
       shippingAddress: data.shippingAddress
     }
 
-    return await this.orderRepoitory.createOrder(orderData)
+    return await this.orderRepository.createOrder(orderData)
   }
 
   async processPayment(paymentData: PaymentDto, orderId: string): Promise<PaymentResponse> {
-    const order = await this.orderRepoitory.findPendingOrderById(orderId)
+    const order = await this.orderRepository.findPendingOrderById(orderId)
     if (!order) throw new NotFoundError({ reason: 'Order not found or already processed' })
 
     let transactionId = ''
@@ -98,21 +98,21 @@ export class OrderService {
       payerEmail: paymentData.method === 'paypal' ? 'demo@paypal.com' : undefined
     }
 
-    return await this.orderRepoitory.createPaymentRecord(paymentRecord)
+    return await this.orderRepository.createPaymentRecord(paymentRecord)
   }
 
   async confirmPayment(orderId: string): Promise<{ order: IOrder, payment: PaymentResponse }> {
-    const successfulPayment = await this.orderRepoitory.getPendingPaymentByOrderId(orderId)
+    const successfulPayment = await this.orderRepository.getPendingPaymentByOrderId(orderId)
     if (!successfulPayment) {
       throw new NotFoundError({ reason: 'No successful payment found for this order' })
     }
 
-    const updatedOrder = await this.orderRepoitory.processPaymentWithTransaction(orderId)
+    const updatedOrder = await this.orderRepository.processPaymentWithTransaction(orderId)
     if (!updatedOrder) {
       throw new BadRequestError({ reason: 'Failed to complete payment transaction' })
     }
 
-    const updateProcessPayment = await this.orderRepoitory.updateProcessPaymentToStatusPaid(orderId)
+    const updateProcessPayment = await this.orderRepository.updateProcessPaymentToStatusPaid(orderId)
     if (!updateProcessPayment) {
       throw new BadRequestError({ reason: 'Failed to update status in process payment' })
     }
@@ -124,7 +124,7 @@ export class OrderService {
   }
 
   async getOrderPayments(orderId: string): Promise<IPayment[]> {
-    const orders = await this.orderRepoitory.getPaymentsByOrderId(orderId)
+    const orders = await this.orderRepository.getPaymentsByOrderId(orderId)
     if (!orders) throw new NotFoundError({ reason: 'Orders not found' })
     return orders
   }

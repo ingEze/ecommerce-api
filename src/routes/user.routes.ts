@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { UserController } from 'src/controller/user.controller.js'
-import { authWithRefreshMiddleware, checkIsActive, roleUserMiddleware } from 'src/middleware/index.js'
-import { UserRepository } from 'src/repository/user.repository.js'
-import { UserService } from 'src/service/user.service.js'
+import { UserController } from 'src/controller/user.controller'
+import { authWithRefreshMiddleware, checkIsActive, roleUserMiddleware } from 'src/middleware/index'
+import { UserRepository } from 'src/repository/user.repository'
+import { UserService } from 'src/service/user.service'
 
 const userRoute = Router()
 const controller = new UserController(new UserService(new UserRepository()))
@@ -10,7 +10,7 @@ const controller = new UserController(new UserService(new UserRepository()))
 /**
  * @swagger
  * tags:
- *   name: Users
+ *   name: "Users"
  *   description: Endpoints for user account management
  */
 
@@ -22,7 +22,7 @@ const controller = new UserController(new UserService(new UserRepository()))
  *   get:
  *     summary: Get all products by username
  *     description: Retrieve a paginated list of products for a given user.
- *     tags: [Users]
+ *     tags: ["Users"]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -78,7 +78,7 @@ userRoute.get('/:username', authWithRefreshMiddleware, controller.getAllProducts
  *   patch:
  *     summary: Activate user account
  *     description: Activate a user account using a verification token.
- *     tags: [Users]
+ *     tags: ["Users"]
  *     parameters:
  *       - in: path
  *         name: token
@@ -113,7 +113,7 @@ userRoute.patch('/verify/:token', controller.activateAccount)
  *   patch:
  *     summary: Update username
  *     description: Update the username of the authenticated user.
- *     tags: [Users]
+ *     tags: ["Users"]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -165,7 +165,7 @@ userRoute.patch('/me/username', authWithRefreshMiddleware, checkIsActive, roleUs
  *   patch:
  *     summary: Update password
  *     description: Update the password of the authenticated user.
- *     tags: [Users]
+ *     tags: ["Users"]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -211,7 +211,7 @@ userRoute.patch('/me/password', authWithRefreshMiddleware, checkIsActive, roleUs
  *   patch:
  *     summary: Update account status
  *     description: Activate or deactivate the authenticated user's account.
- *     tags: [Users]
+ *     tags: ["Users"]
  *     security:
  *       - bearerAuth: []
  *     requestBody:

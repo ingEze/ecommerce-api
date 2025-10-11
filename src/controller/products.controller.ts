@@ -1,11 +1,11 @@
 import { BadRequestError, ValidationProductError } from '@ingeze/api-error'
 import { NextFunction, Request, Response } from 'express'
-import { validatePaginationParams } from 'src/dtos/pagination.dto.js'
-import { ProductUpdateValidation, ProductValidation } from 'src/dtos/product.dto.js'
-import { validateQuerys } from 'src/dtos/productsQuery.dto.js'
-import { ProductsService } from 'src/service/products.service.js'
-import { IQueryDTO, ProductDto } from 'src/types/product.types.js'
-import { getCurrentUserById } from 'src/utils/getCurrentUserID.js'
+import { validatePaginationParams } from 'src/dtos/pagination.dto'
+import { ProductUpdateValidation, ProductValidation } from 'src/dtos/product.dto'
+import { validateQuerys } from 'src/dtos/productsQuery.dto'
+import { ProductsService } from 'src/service/products.service'
+import { IQueryDTO, ProductDto } from 'src/types/product.types'
+import { getCurrentUserById } from 'src/utils/getCurrentUserID'
 
 export class ProtectedController {
   constructor(private readonly productsService: ProductsService) {}

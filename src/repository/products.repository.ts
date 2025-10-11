@@ -1,8 +1,8 @@
 import { ForbiddenUserError, ProductNotFoundError, UserNotFoundError } from '@ingeze/api-error'
 import { ObjectId, FilterQuery } from 'mongoose'
-import { Products } from 'src/models/product.schema.js'
-import { User } from 'src/models/user.schema.js'
-import { IProductSchema, ProductDto, ProductUpdateDto } from 'src/types/product.types.js'
+import { Products } from 'src/models/product.schema'
+import { User } from 'src/models/user.schema'
+import { IProductSchema, ProductDto, ProductUpdateDto } from 'src/types/product.types'
 
 export class ProductRepository {
   async getMountProducts(filter: object = {}): Promise<number> {

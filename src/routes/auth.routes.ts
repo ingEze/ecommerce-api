@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { AuthController } from 'src/controller/auth.controller.js'
-import { refreshTokenMiddleware } from 'src/middleware/index.js'
-import { authRateLimiter, forgotPasswordRateLimiter } from 'src/middleware/rateLimit.middleware.js'
-import { AuthService } from 'src/service/auth.service.js'
+import { AuthController } from 'src/controller/auth.controller'
+import { refreshTokenMiddleware } from 'src/middleware/index'
+import { authRateLimiter, forgotPasswordRateLimiter } from 'src/middleware/rateLimit.middleware'
+import { AuthService } from 'src/service/auth.service'
 
 const authRoute = Router()
 const controller = new AuthController(new AuthService())
@@ -10,7 +10,7 @@ const controller = new AuthController(new AuthService())
 /**
  * @swagger
  * tags:
- *   name: Auth
+ *   name: "Auth"
  *   description: Authentication endpoints
  */
 
@@ -19,7 +19,7 @@ const controller = new AuthController(new AuthService())
  * /auth/register:
  *   post:
  *     summary: Register a new user and send verification email
- *     tags: [Auth]
+ *     tags: ["Auth"]
  *     requestBody:
  *       required: true
  *       content:
@@ -80,7 +80,7 @@ authRoute.post('/register', authRateLimiter, controller.registerAndSendValidateM
  * /auth/login:
  *   post:
  *     summary: User login
- *     tags: [Auth]
+ *     tags: ["Auth"]
  *     requestBody:
  *       required: true
  *       content:
@@ -136,7 +136,7 @@ authRoute.post('/login', authRateLimiter, controller.login)
  * /auth/forgot-password:
  *   patch:
  *     summary: Request password reset
- *     tags: [Auth]
+ *     tags: ["Auth"]
  *     requestBody:
  *       required: true
  *       content:
@@ -185,7 +185,7 @@ authRoute.patch('/forgot-password', forgotPasswordRateLimiter, controller.reques
  * /auth/reset-password/{token}:
  *   patch:
  *     summary: Reset password using token
- *     tags: [Auth]
+ *     tags: ["Auth"]
  *     parameters:
  *       - in: path
  *         name: token
@@ -239,7 +239,7 @@ authRoute.patch('/reset-password/:token', forgotPasswordRateLimiter, controller.
  * /auth/refresh:
  *   post:
  *     summary: Refresh JWT access token
- *     tags: [Auth]
+ *     tags: ["Auth"]
  *     responses:
  *       200:
  *         description: New access_token set in cookie
