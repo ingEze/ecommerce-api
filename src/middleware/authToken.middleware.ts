@@ -1,7 +1,7 @@
 import { InvalidTokenError, UnauthorizedError } from '@ingeze/api-error'
 import { Request, Response, NextFunction } from 'express'
-import { UserRepository } from 'src/repository/user.repository'
-import { generateAuthToken, verifyAuthToken, verifyRefreshToken } from 'src/utils/jwt'
+import { UserRepository } from 'src/repository/user.repository.js'
+import { generateAuthToken, verifyAuthToken, verifyRefreshToken } from 'src/utils/jwt.js'
 
 const userRepository = new UserRepository()
 
@@ -13,8 +13,6 @@ export const refreshTokenMiddleware = (req: Request, res: Response, next: NextFu
     }
 
     const decoded = verifyRefreshToken(refresh_token) as { _id: string }
-    console.log('DECODED REFRESH TOKEN MIDDLEWARE:', decoded)
-
     if (typeof decoded === 'string' || !decoded._id) {
       throw new InvalidTokenError({ reason: 'Invalid token format' })
     }

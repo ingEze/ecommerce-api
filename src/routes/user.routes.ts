@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { UserController } from 'src/controller/user.controller'
-import { authWithRefreshMiddleware, checkIsActive, roleUserMiddleware } from 'src/middleware/index'
-import { UserRepository } from 'src/repository/user.repository'
-import { UserService } from 'src/service/user.service'
+import { UserController } from 'src/controller/user.controller.js'
+import { authWithRefreshMiddleware, checkIsActive, roleUserMiddleware } from 'src/middleware/index.js'
+import { UserRepository } from 'src/repository/user.repository.js'
+import { UserService } from 'src/service/user.service.js'
 
 const userRoute = Router()
 const controller = new UserController(new UserService(new UserRepository()))

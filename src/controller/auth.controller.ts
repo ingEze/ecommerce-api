@@ -1,9 +1,9 @@
 import { BadRequestError, UnauthorizedError } from '@ingeze/api-error'
 import { Request, Response, NextFunction } from 'express'
-import { ValidateLogin, registerValidationData, ValidateResetPassword, ValidateEmail } from 'src/dtos/auth.dto'
-import { AuthService } from 'src/service/auth.service'
-import { checkRequiredFields } from 'src/utils/dataEmptyError'
-import { generateAuthToken } from 'src/utils/jwt'
+import { ValidateLogin, registerValidationData, ValidateResetPassword, ValidateEmail } from 'src/dtos/auth.dto.js'
+import { AuthService } from 'src/service/auth.service.js'
+import { checkRequiredFields } from 'src/utils/dataEmptyError.js'
+import { generateAuthToken } from 'src/utils/jwt.js'
 
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { AuthController } from 'src/controller/auth.controller'
-import { refreshTokenMiddleware } from 'src/middleware/index'
-import { authRateLimiter, forgotPasswordRateLimiter } from 'src/middleware/rateLimit.middleware'
-import { AuthService } from 'src/service/auth.service'
+import { AuthController } from 'src/controller/auth.controller.js'
+import { refreshTokenMiddleware } from 'src/middleware/index.js'
+import { authRateLimiter, forgotPasswordRateLimiter } from 'src/middleware/rateLimit.middleware.js'
+import { AuthService } from 'src/service/auth.service.js'
 
 const authRoute = Router()
 const controller = new AuthController(new AuthService())

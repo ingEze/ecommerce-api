@@ -1,11 +1,12 @@
 import { BadRequestError, ValidationProductError } from '@ingeze/api-error'
 import { NextFunction, Request, Response } from 'express'
-import { validatePaginationParams } from 'src/dtos/pagination.dto'
-import { ProductUpdateValidation, ProductValidation } from 'src/dtos/product.dto'
-import { validateQuerys } from 'src/dtos/productsQuery.dto'
-import { ProductsService } from 'src/service/products.service'
-import { IQueryDTO, ProductDto } from 'src/types/product.types'
-import { getCurrentUserById } from 'src/utils/getCurrentUserID'
+import mongoose from 'mongoose'
+import { validatePaginationParams } from 'src/dtos/pagination.dto.js'
+import { ProductUpdateValidation, ProductValidation } from 'src/dtos/product.dto.js'
+import { validateQuerys } from 'src/dtos/productsQuery.dto.js'
+import { ProductsService } from 'src/service/products.service.js'
+import { IQueryDTO, ProductDto } from 'src/types/product.types.js'
+import { getCurrentUserById } from 'src/utils/getCurrentUserID.js'
 
 export class ProtectedController {
   constructor(private readonly productsService: ProductsService) {}
@@ -43,10 +44,12 @@ export class ProtectedController {
 
       if (result.products.length === 0) {
         res.status(200).json({
-          suucess: true,
+          success: true,
           message: 'No products found',
           pagination,
-          products: {}
+          data: {
+            products: []
+          }
         })
         return
       }
@@ -67,6 +70,10 @@ export class ProtectedController {
   getProductById = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        throw new BadRequestError({ reason: 'Invalid ID' })
+      }
+
       const result = await this.productsService.getProductById(id)
       res.status(200).json({
         success: true,
@@ -80,7 +87,16 @@ export class ProtectedController {
 
   addProduct = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const validated = ProductValidation(req.body)
+      let validated
+      try {
+        validated = ProductValidation(req.body)
+      } catch (err) {
+        if (err instanceof Error && err.name === 'ZodError') {
+          throw new BadRequestError({ reason: 'Invalid product data' })
+        }
+        throw err
+      }
+
       if (!validated) throw new BadRequestError({ reason: validated })
 
       const userId = getCurrentUserById(req)

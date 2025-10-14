@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { logError } from 'src/utils/logger.helper'
+import { logError } from 'src/utils/logger.helper.js'
 
 export const errorLogger = (err: unknown, req: Request, res: Response, next: NextFunction): void => {
   logError(err, req.originalUrl)

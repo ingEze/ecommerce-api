@@ -1,9 +1,9 @@
-import { AuthDto, EmailDto, LoginDto, ValidateLogin } from 'src/dtos/auth.dto'
 import { BadRequestError, EmailNotFoundError, InvalidCredentialsError, UnauthorizedError, UserNotFoundError } from '@ingeze/api-error'
-import { UserRepository } from 'src/repository/user.repository'
-import { comparePassword, hashedPassword } from 'src/utils/hashPassword'
-import { generateAccountActivationToken, generateAuthToken, generateRefreshToken, generateResetTokenForMail, verifyResetTokenForMail } from 'src/utils/jwt'
-import { EmailService } from './email.service'
+import { AuthDto, EmailDto, LoginDto } from 'src/dtos/auth.dto.js'
+import { UserRepository } from 'src/repository/user.repository.js'
+import { comparePassword, hashedPassword } from 'src/utils/hashPassword.js'
+import { generateAccountActivationToken, generateAuthToken, generateRefreshToken, generateResetTokenForMail, verifyResetTokenForMail } from 'src/utils/jwt.js'
+import { EmailService } from './email.service.js'
 
 const emailService = new EmailService()
 const userRepository = new UserRepository()
@@ -39,8 +39,6 @@ export class AuthService {
   }
 
   async login(data: LoginDto): Promise<{ access_token: string, refresh_token: string }> {
-    ValidateLogin(data)
-
     const user = await new UserRepository().findUserByEmail(data?.email)
     if (!user) throw new UserNotFoundError({ reason: `${data.email} not found` })
 

@@ -1,4 +1,4 @@
-import { ProductDto, ProductUpdateDto } from 'src/types/product.types'
+import { ProductDto, ProductUpdateDto } from 'src/types/product.types.js'
 import z from 'zod'
 
 const ProductSchemaDto = z.object({

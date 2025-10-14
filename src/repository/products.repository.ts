@@ -1,8 +1,8 @@
 import { ForbiddenUserError, ProductNotFoundError, UserNotFoundError } from '@ingeze/api-error'
 import { ObjectId, FilterQuery } from 'mongoose'
-import { Products } from 'src/models/product.schema'
-import { User } from 'src/models/user.schema'
-import { IProductSchema, ProductDto, ProductUpdateDto } from 'src/types/product.types'
+import { Products } from 'src/models/product.schema.js'
+import { User } from 'src/models/user.schema.js'
+import { IProductSchema, ProductDto, ProductUpdateDto } from 'src/types/product.types.js'
 
 export class ProductRepository {
   async getMountProducts(filter: object = {}): Promise<number> {
@@ -95,6 +95,7 @@ export class ProductRepository {
 
   async updateProducts(userId: string, productId: string, data: ProductUpdateDto): Promise<void> {
     const user = await User.findById(userId).populate('products')
+    if (!user) throw new UserNotFoundError()
 
     const products = user?.products as IProductSchema[] | undefined
     const product = products?.find(p => p._id.toString() === productId)
@@ -112,6 +113,7 @@ export class ProductRepository {
     if (!product) throw new ProductNotFoundError()
 
     const user = await User.findById(userId)
+    if (!user) throw new UserNotFoundError()
 
     const role = user?.role
     const owner = product?.owner

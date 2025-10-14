@@ -2,16 +2,15 @@ import express from 'express'
 import cookieParser from 'cookie-parser'
 import { expressErrorMiddleware } from '@ingeze/api-error/express'
 
-import { authRoute, orderRoute, productsRoute, userRoute, wishlistRoute } from './routes/index'
+import { authRoute, orderRoute, productsRoute, userRoute, wishlistRoute } from './routes/index.js'
 
-import { setupSwagger } from '../docs/swagger'
+import { setupSwagger } from '../docs/swagger.js'
 
-import { connectDB } from './db/mongoDB/connectDB'
-import { createAdminIfNotExists } from './utils/firstUserAdmin'
-import { config } from './config/index'
-import { globalRateLimiter } from './middleware/rateLimit.middleware'
-import { morganMiddleware } from './middleware/morgan.middleware'
-import { errorLogger } from './middleware/errorLogger.middleware'
+import { connectDB } from './db/mongoDB/connectDB.js'
+import { createAdminIfNotExists } from './utils/firstUserAdmin.js'
+import { config } from './config/index.js'
+import { globalRateLimiter } from './middleware/rateLimit.middleware.js'
+import { morganMiddleware, errorLogger } from './middleware/index.js'
 
 const app = express()
 

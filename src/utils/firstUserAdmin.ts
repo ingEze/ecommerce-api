@@ -1,6 +1,6 @@
-import { User } from 'src/models/user.schema'
-import { hashedPassword } from './hashPassword'
-import { config } from 'src/config/index'
+import { User } from 'src/models/user.schema.js'
+import { hashedPassword } from './hashPassword.js'
+import { config } from 'src/config/index.js'
 
 export async function createAdminIfNotExists(): Promise<void> {
   const userCount = await User.countDocuments()
