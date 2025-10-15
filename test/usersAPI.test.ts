@@ -20,4 +20,13 @@ describe('Users API', () => {
             expect(Array.isArray(res.body.data.products)).toBe(true)
         })
     })
+
+    describe('PATH /users/verify/:token', () => {
+        it('should validate account user by token', async () => {
+            const res = await request(app).patch('/users/verify/123456789asdfghjkl')
+            expect(res.statusCode).toBe(200)
+            expect(res.body).toHaveProperty('message')
+            expect(res.body.message).toMatch(/validated|successfully/)
+        })
+    })
 })

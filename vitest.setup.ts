@@ -413,6 +413,7 @@ vi.mock('src/repository/user.repository', () => ({
         owner: 'user123'
       }
     ])
+    updateStatusAccount = vi.fn().mockResolvedValue({})
   }
 }))
 
@@ -638,6 +639,8 @@ vi.spyOn(userService, 'getProductsByUser').mockImplementation(
   }
 )
 
+vi.spyOn(userService, 'activeAccount').mockResolvedValue()
+
 vi.mock('src/service/products.service', () => ({
   ProductsService: class {
     createProduct = vi.fn().mockImplementation((userId, productData) =>
@@ -757,7 +760,8 @@ vi.mock('src/utils/jwt', () => ({
   generateRefreshToken: vi.fn().mockReturnValue('mocked_refresh_token'),
   generateAccountActivationToken: vi.fn().mockReturnValue('mocked_activation_token'),
   generateResetTokenForMail: vi.fn().mockReturnValue('mocked_reset_token'),
-  verifyResetTokenForMail: vi.fn().mockReturnValue('671f50b7d4dbeff95c3d9b33')
+  verifyResetTokenForMail: vi.fn().mockReturnValue('671f50b7d4dbeff95c3d9b33'),
+  verifyAccountActivationToken: vi.fn().mockResolvedValue('671f50b7d4dbeff95c3d9b39')
 }))
 
 vi.mock('src/utils/getCurrentUserID', () => ({
