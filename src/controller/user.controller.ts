@@ -58,7 +58,7 @@ export class UserController {
       const userId = getCurrentUserById(req)
 
       const data = {
-        newUsername: validateUsername.newUsername,
+        username: validateUsername.username,
         password: validateUsername.password
       }
 
@@ -83,8 +83,8 @@ export class UserController {
       const userId = getCurrentUserById(req)
 
       const data = {
-        newPassword: validatePassword.newPassword,
-        password: validatePassword.password
+        password: validatePassword.password,
+        currentPassword: validatePassword.currentPassword
       }
 
       await this.userService.updatePassword(data, userId)
@@ -106,7 +106,7 @@ export class UserController {
       const userId = getCurrentUserById(req)
 
       const data = {
-        newEmail: validateEmail.newEmail,
+        email: validateEmail.email,
         password: validateEmail.password
       }
 
@@ -116,7 +116,7 @@ export class UserController {
         success: true,
         message: 'Email updated successfully',
         data: {
-          email: result.newEmail
+          email: result.email
         }
       })
     } catch (err) {

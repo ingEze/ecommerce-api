@@ -17,7 +17,7 @@ export interface IUser extends Document {
   products: Types.ObjectId
 }
 
-export interface IUpdateUsernameDTO { newUsername: string, password: string }
-export interface IUpdatePasswordDTO { newPassword: string, password: string }
-export interface IUpdateEmailDTO { newEmail: string, password: string }
+export interface IUpdateUsernameDTO { username: string, password: string }
+export interface IUpdatePasswordDTO { password: string, currentPassword: string }
+export interface IUpdateEmailDTO { email: string, password: string }
 export interface IUpdateStatusAccountDTO { isActive: boolean, password: string }

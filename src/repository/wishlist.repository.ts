@@ -1,6 +1,7 @@
 import { BadRequestError } from '@ingeze/api-error'
-import { Wishlist } from 'src/models/wishlist.schema'
-import { IWishlist, IWishlistProductInput, IWishlistPopulated } from 'src/types/wishlist.types'
+import { UpdateWriteOpResult } from 'mongoose'
+import { Wishlist } from 'src/models/wishlist.schema.js'
+import { IWishlist, IWishlistProductInput, IWishlistPopulated } from 'src/types/wishlist.types.js'
 
 export class WishlistRepository {
   async addProduct(data: IWishlistProductInput): Promise<IWishlist> {
@@ -45,8 +46,8 @@ export class WishlistRepository {
     return response
   }
 
-  async deleteProductToWishlist(userId: string, wishlistProductId: string): Promise<void> {
-    await Wishlist.updateOne(
+  async deleteProductToWishlist(userId: string, wishlistProductId: string): Promise<UpdateWriteOpResult> {
+    return await Wishlist.updateOne(
       { userId },
       { $pull: { products: { productId: wishlistProductId } } }
     )

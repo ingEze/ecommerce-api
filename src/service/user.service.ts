@@ -38,8 +38,8 @@ export class UserService {
     }
   }
 
-  async updateUsername(data: { newUsername: string, password: string }, userId: string): Promise<{ username: string }> {
-    const existingUsername = await this.userRepository.findUserByUsername(data.newUsername)
+  async updateUsername(data: { username: string, password: string }, userId: string): Promise<{ username: string }> {
+    const existingUsername = await this.userRepository.findUserByUsername(data.username)
     if (existingUsername) throw new BadRequestError({ reason: 'Username already exists' })
 
     const user = await this.userRepository.findUserById(userId)
@@ -47,24 +47,24 @@ export class UserService {
     const verifyPassword = await comparePassword(data.password, user!.password)
     if (!verifyPassword) throw new UnauthorizedError({ reason: 'Invalid credentials' })
 
-    await this.userRepository.updateUsername({ newUsername: data.newUsername, password: data.password }, userId)
+    await this.userRepository.updateUsername({ newUsername: data.username, password: data.password }, userId)
     return {
-      username: data.newUsername
+      username: data.username
     }
   }
 
-  async updatePassword(data: { newPassword: string, password: string }, userId: string): Promise<void> {
+  async updatePassword(data: { password: string, currentPassword: string }, userId: string): Promise<void> {
     const user = await this.userRepository.findUserById(userId)
 
-    const verifyPassword = await comparePassword(data.password, user!.password)
+    const verifyPassword = await comparePassword(data.currentPassword, user!.password)
     if (!verifyPassword) throw new UnauthorizedError({ reason: 'Invalid credentials' })
 
-    const password = await hashedPassword(data.newPassword)
+    const password = await hashedPassword(data.password)
     await this.userRepository.updatePassword(password, userId)
   }
 
-  async updateEmail(data: { newEmail: string, password: string }, userId: string): Promise<{ newEmail: string }> {
-    const existingEmail = await this.userRepository.findUserByEmail(data.newEmail)
+  async updateEmail(data: { email: string, password: string }, userId: string): Promise<{ email: string }> {
+    const existingEmail = await this.userRepository.findUserByEmail(data.email)
     if (existingEmail) {
       throw new ErrorHandler(
         'Resource already exists',
@@ -82,10 +82,10 @@ export class UserService {
     const verifyPassword = await comparePassword(data.password, user.password)
     if (!verifyPassword) throw new UnauthorizedError({ reason: 'Invalid credentials' })
 
-    await this.userRepository.updateEmail(data.newEmail, userId)
+    await this.userRepository.updateEmail(data.email, userId)
 
     return {
-      newEmail: data.newEmail
+      email: data.email
     }
   }
 

@@ -1,8 +1,8 @@
 import { NotFoundError } from '@ingeze/api-error'
-import { IWishlist, IWishlistPopulated } from 'src/types/wishlist.types'
-import { ProductRepository } from 'src/repository/products.repository'
-import { WishlistRepository } from 'src/repository/wishlist.repository'
-import { IWishlistProductInput } from 'src/types/wishlist.types'
+import { IWishlist, IWishlistPopulated } from 'src/types/wishlist.types.js'
+import { ProductRepository } from 'src/repository/products.repository.js'
+import { WishlistRepository } from 'src/repository/wishlist.repository.js'
+import { IWishlistProductInput } from 'src/types/wishlist.types.js'
 
 export class WishlistService {
   constructor(private readonly wishlistRepository: WishlistRepository) {}
@@ -23,6 +23,9 @@ export class WishlistService {
   }
 
   async deleteProductToWishlist(userId: string, wishlistProductId: string): Promise<void> {
-    await this.wishlistRepository.deleteProductToWishlist(userId, wishlistProductId)
+    const result = await this.wishlistRepository.deleteProductToWishlist(userId, wishlistProductId)
+    if (result.modifiedCount === 0) {
+      throw new NotFoundError({ reason: 'Product not found in wishlist' })
+    }
   }
 }

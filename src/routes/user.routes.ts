@@ -207,6 +207,59 @@ userRoute.patch('/me/password', authWithRefreshMiddleware, checkIsActive, roleUs
 
 /**
  * @swagger
+ * /user/me/email:
+ *   patch:
+ *     summary: Update email
+ *     description: Update the email of the authenticated user.
+ *     tags: ["Users"]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - newEmail
+ *               - password
+ *             properties:
+ *               newEmail:
+ *                 type: string
+ *                 format: email
+ *                 example: "newemail@example.com"
+ *               password:
+ *                 type: string
+ *                 example: "currentPassword"
+ *     responses:
+ *       200:
+ *         description: Email updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Email updated successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                       example: "newemail@example.com"
+ *       400:
+ *         description: Invalid data
+ *       401:
+ *         description: Unauthorized
+ */
+userRoute.patch('/me/email', authWithRefreshMiddleware, checkIsActive, roleUserMiddleware, controller.updateEmail)
+
+/**
+ * @swagger
  * /user/me/status:
  *   patch:
  *     summary: Update account status

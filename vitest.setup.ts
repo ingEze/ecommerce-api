@@ -414,6 +414,8 @@ vi.mock('src/repository/user.repository', () => ({
       }
     ])
     updateStatusAccount = vi.fn().mockResolvedValue({})
+    updateUsername = vi.fn().mockResolvedValue({ username: 'testUpdated' })
+    updateEmail = vi.fn().mockResolvedValue({ email: 'newEmail@example.com' })
   }
 }))
 
@@ -538,6 +540,30 @@ vi.mock('src/repository/auth.repository', () => ({
   }
 }))
 
+vi.mock('src/repository/wishlist.repository', () => ({
+  WishlistRepository: class WishlistRepository {
+    getProducts = vi.fn().mockResolvedValue(
+      [{
+        userId: '671f50b7d4dbeff95c3d9b33',
+        products: {
+          productId: {
+            _id: 'mocked_id',
+            title: 'mock_title',
+            price: 24
+          }
+        }
+      }]
+    )
+    addProduct = vi.fn().mockResolvedValue({
+      userId: '671f50b7d4dbeff95c3d9b33',
+      products: [{
+        productId: 'mocked_product_id'
+      }]
+    })
+    deleteProductToWishlist = vi.fn().mockResolvedValue({})
+  }
+}))
+
 const mockOrder = {
   userId: '671f50b7d4dbeff95c3d9b33',
   items: [
@@ -638,8 +664,9 @@ vi.spyOn(userService, 'getProductsByUser').mockImplementation(
     })
   }
 )
-
 vi.spyOn(userService, 'activeAccount').mockResolvedValue()
+vi.spyOn(userService, 'updateUsername').mockResolvedValue({ username: 'testUpdated' })
+vi.spyOn(userService, 'updateStatusAccount').mockResolvedValue()
 
 vi.mock('src/service/products.service', () => ({
   ProductsService: class {
@@ -741,6 +768,30 @@ vi.mock('src/service/email.service', () => ({
   }
 }))
 
+vi.mock('src/service/wishlist.service', () => ({
+  WishlistService: class WishlistService {
+    getProductToWishlist = vi.fn().mockResolvedValue(
+      [{
+        userId: '671f50b7d4dbeff95c3d9b33',
+        products: {
+          productId: {
+            _id: 'mocked_id',
+            title: 'mock_title',
+            price: 24
+          }
+        }
+      }]
+    )
+    addProduct = vi.fn().mockResolvedValue({
+      userId: '671f50b7d4dbeff95c3d9b33',
+      products: [{
+        productId: 'mocked_product_id'
+      }]
+    })
+    deleteProductToWishlist = vi.fn().mockResolvedValue({})
+  }
+}))
+
 // MOCK UTILS
 vi.mock('src/utils/hashPassword', () => ({
   comparePassword: vi.fn().mockImplementation((input, hash) => {
@@ -818,7 +869,7 @@ vi.mock('src/utils/dataEmptyError', () => ({
 }))
 
 // MOCK DTOs
-vi.mock('src/dtos/auth.dto.js', () => ({
+vi.mock('src/dtos/auth.dto', () => ({
   ValidateLogin: vi.fn((data) => data),
   registerValidationData: vi.fn((data) => data),
   ValidateResetPassword: vi.fn((data) => data),
@@ -830,7 +881,7 @@ vi.mock('src/dtos/products.dto', () => ({
   validateUpdateProductData: vi.fn((data) => data)
 }))
 
-vi.mock('src/dtos/products.dto.js', () => ({
+vi.mock('src/dtos/products.dto', () => ({
   validateProductData: vi.fn((data) => data),
   validateUpdateProductData: vi.fn((data) => data)
 }))

@@ -1,8 +1,8 @@
-import { IUpdateEmailDTO, IUpdatePasswordDTO, IUpdateStatusAccountDTO, IUpdateUsernameDTO } from 'src/types/user.types'
+import { IUpdateEmailDTO, IUpdatePasswordDTO, IUpdateStatusAccountDTO, IUpdateUsernameDTO } from 'src/types/user.types.js'
 import z from 'zod'
 
 const UpdateUsernameSchema = z.object({
-  newUsername: z
+  username: z
     .string()
     .min(3)
     .max(16),
@@ -12,16 +12,16 @@ const UpdateUsernameSchema = z.object({
 })
 
 const UpdatePasswordSchema = z.object({
-  newPassword: z
+  password: z
     .string()
     .min(8),
-  password: z
+  currentPassword: z
     .string()
     .min(8)
 })
 
 const UpdateEmailSchema = z.object({
-  newEmail: z
+  email: z
     .string()
     .email()
     .min(1),
