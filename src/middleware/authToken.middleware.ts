@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express'
 import { UserRepository } from '../repository/user.repository.js'
 import { generateAuthToken, verifyAuthToken, verifyRefreshToken } from '../utils/jwt.js'
 import jwt from 'jsonwebtoken'
-import { config } from 'src/config/index.js'
+import { config } from '../config/index.js'
 
 const userRepository = new UserRepository()
 

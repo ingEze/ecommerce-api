@@ -3,7 +3,7 @@ import { UserController } from '../controller/user.controller.js'
 import { authWithRefreshMiddleware, checkIsActive, roleUserMiddleware } from '../middleware/index.js'
 import { UserRepository } from '../repository/user.repository.js'
 import { UserService } from '../service/user.service.js'
-import { checkDemoUser } from 'src/middleware/checkDemoUser.middleware.js'
+import { checkDemoUser } from '../middleware/checkDemoUser.middleware.js'
 
 const userRoute = Router()
 const controller = new UserController(new UserService(new UserRepository()))

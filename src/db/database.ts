@@ -17,6 +17,7 @@ export class Database {
     for (let i = 0; i < retries; i++) {
       try {
         await dbService.connect(uri)
+        logger.info('URI', uri)
         logger.info('DB Connected')
         return
       } catch (error) {

@@ -1,7 +1,7 @@
 import { ForbiddenUserError } from '@ingeze/api-error'
 import { Request, Response, NextFunction } from 'express'
-import { UserRepository } from 'src/repository/user.repository.js'
-import { getCurrentUserById } from 'src/utils/getCurrentUserID.js'
+import { UserRepository } from '../repository/user.repository.js'
+import { getCurrentUserById } from '../utils/getCurrentUserID.js'
 
 export const checkDemoUser = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

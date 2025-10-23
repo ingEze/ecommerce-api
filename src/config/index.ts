@@ -4,7 +4,7 @@ export const config = {
   },
   url: {
     APP_URL: process.env.APP_URL || 'http://localhost',
-    PORT: process.env.PORT || 3033
+    PORT: process.env.PORT || 3056
   },
   adminUser: {
     ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'admin@example.com',

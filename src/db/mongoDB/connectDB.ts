@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { config } from '../../config/index.js'
 import { Database } from '../database.js'
-import logger from 'src/utils/logger.js'
+import logger from '../../utils/logger.js'
 
 const uri = config.db.URI
 

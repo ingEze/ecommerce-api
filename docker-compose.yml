@@ -3,10 +3,13 @@ services:
     build:
       dockerfile: Dockerfile
     ports:
-      - '3000:3000'
+      - '${PORT}:${PORT}'
+    env_file:
+      - .env
     environment:
       - MONGO_URI=${MONGO_URI}
       - APP_URL=${APP_URL}
+      - PORT=${PORT}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - AUTH_TOKEN_SECRET=${AUTH_TOKEN_SECRET}
@@ -24,21 +27,21 @@ services:
     networks:
       - app-network
 
-  app-dev:
-    build:
-      dockerfile: Dockerfile.dev
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - '3033:3033'
-    environment:
-      - APP_URL=http://localhost:3033
-    depends_on:
-      mongo:
-        condition: service_healthy
-    networks:
-      - app-network
+  # app-dev:
+  #   build:
+  #     dockerfile: Dockerfile.dev
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   ports:
+  #     - '3033:3033'
+  #   environment:
+  #     - APP_URL=http://localhost:3033
+  #   depends_on:
+  #     mongo:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-network
 
   mongo:
     image: mongo:6.0
