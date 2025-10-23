@@ -81,7 +81,7 @@ The API will be available at `https://ecommerce-api-nmfr.onrender.com/`
 
 ## 🌐 Landing Page
 
-- 🔗 [E-commerce API](ecommerce-api-page.vercel.app)
+- 🔗 [E-commerce API](https://ecommerce-api-page.vercel.app)
 
 The landing page is currently in development and will offer:
 
