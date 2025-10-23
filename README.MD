@@ -38,7 +38,7 @@ Complete API documentation available in multiple languages:
 Interactive API documentation with live testing:
 
 ```
-http://localhost:3033/api-docs
+https://ecommerce-api-nmfr.onrender.com/api-docs/
 ```
 
 ---
@@ -60,7 +60,7 @@ cp .env.example .env
 npm run dev
 ```
 
-The API will be available at `http://localhost:3033`
+The API will be available at `https://ecommerce-api-nmfr.onrender.com/`
 
 ---
 
