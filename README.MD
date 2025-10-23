@@ -176,7 +176,7 @@ This project is licensed under the **ISC License**.
 
 **Ezequiel Saucedo**
 
-- Portfolio: []
+- Portfolio: [Link](https://portfolio-nine-sandy-13.vercel.app)
 - LinkedIn: [Ezequiel Saucedo](https://www.linkedin.com/in/ezequiel-rodrigo-saucedo-50451a294)
 - GitHub: [@ingEze](https://github.com/ingEze)
 
