@@ -29,9 +29,9 @@ The API is ready to integrate with any frontend, and will soon feature an intera
 
 Complete API documentation available in multiple languages:
 
-> 🇬🇧 **[English Documentation](docs/documentation.en.md)** - Full guide in English
+> 🇬🇧 **[English Documentation](src/docs/documentation.en.md)** - Full guide in English
 > 
-> 🇪🇸 **[Documentación en Español](docs/documentation.es.md)** - Guía completa en español
+> 🇪🇸 **[Documentación en Español](src/docs/documentation.es.md)** - Guía completa en español
 
 ### Swagger UI
 
@@ -47,7 +47,7 @@ http://localhost:3033/api-docs
 
 ```bash
 # Clone repository
-git clone https://github.com/tu-usuario/ecommerce-api.git
+git clone https://github.com/ingeze/ecommerce-api.git
 cd ecommerce-api
 
 # Install dependencies
@@ -81,15 +81,15 @@ The API will be available at `http://localhost:3033`
 
 ## 🌐 Landing Page
 
+- 🔗 [E-commerce API]()
+
 The landing page is currently in development and will offer:
 
 - General API information and overview
 - Quick access to interactive documentation
 - Endpoint examples and usage guides
-- Call-to-action buttons: "Get Started" to register and test the API
-- Real-time status and health checks
+- Call-to-action buttons: "Get Started" to test the API
 
-*(Coming soon online)*
 
 ---
 
@@ -117,7 +117,7 @@ The landing page is currently in development and will offer:
 - `POST /wishlist/:productId` - Add to wishlist
 - `DELETE /wishlist/:productId` - Remove from wishlist
 
-For complete endpoint details, see the [full documentation](docs/documentation.en.md).
+For complete endpoint details, see the [full documentation](src/docs/documentation.en.md).
 
 ---
 
